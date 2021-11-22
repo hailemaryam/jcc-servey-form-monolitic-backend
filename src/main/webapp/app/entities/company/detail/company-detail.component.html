@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="company">
+      <h2 data-cy="companyDetailsHeading"><span jhiTranslate="rmtMonoliticApp.company.detail.title">Company</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ company.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.company.strategicObjective">Strategic Objective</span></dt>
+        <dd>
+          <span>{{ company.strategicObjective }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.company.futureFocusArea">Future Focus Area</span></dt>
+        <dd>
+          <span>{{ company.futureFocusArea }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.company.currentFundingCycle">Current Funding Cycle</span></dt>
+        <dd>
+          <span>{{ company.currentFundingCycle }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.company.user">User</span></dt>
+        <dd>
+          <span>{{ company.user?.login }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.company.typeOfOrganation">Type Of Organation</span></dt>
+        <dd>
+          <div *ngIf="company.typeOfOrganation">
+            <a [routerLink]="['/type-of-organization', company.typeOfOrganation?.id, 'view']">{{ company.typeOfOrganation?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/company', company.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

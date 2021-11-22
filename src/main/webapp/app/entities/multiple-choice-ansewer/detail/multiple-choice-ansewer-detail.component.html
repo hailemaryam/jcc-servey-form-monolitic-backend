@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="multipleChoiceAnsewer">
+      <h2 data-cy="multipleChoiceAnsewerDetailsHeading">
+        <span jhiTranslate="rmtMonoliticApp.multipleChoiceAnsewer.detail.title">Multiple Choice Ansewer</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ multipleChoiceAnsewer.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.multipleChoiceAnsewer.choice">Choice</span></dt>
+        <dd>
+          <span>{{ multipleChoiceAnsewer.choice }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.multipleChoiceAnsewer.answer">Answer</span></dt>
+        <dd>
+          <div *ngIf="multipleChoiceAnsewer.answer">
+            <a [routerLink]="['/answer', multipleChoiceAnsewer.answer?.id, 'view']">{{ multipleChoiceAnsewer.answer?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/multiple-choice-ansewer', multipleChoiceAnsewer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

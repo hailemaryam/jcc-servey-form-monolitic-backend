@@ -7,6 +7,14 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "form": "Form",
+        "question": "Question",
+        "questionChoice": "Question Choice",
+        "formProgresss": "Form Progresss",
+        "answer": "Answer",
+        "multipleChoiceAnsewer": "Multiple Choice Ansewer",
+        "typeOfOrganization": "Type Of Organization",
+        "company": "Company",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

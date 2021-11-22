@@ -1,0 +1,51 @@
+{
+  "name": "Question",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "mandatory",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataType",
+      "fieldType": "DataType",
+      "fieldValues": "NUMBER,BOOLEAN,SHORT_ANSWER,PARAGRAPH,MULTIPLE_CHOICE,CHECK_BOX,DROP_DOWN,FILE_UPLOAD,DATE,TIME"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "questionChoice",
+      "otherEntityRelationshipName": "question",
+      "relationshipName": "questionChoice"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "answer",
+      "otherEntityRelationshipName": "question",
+      "relationshipName": "answer"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "form",
+      "otherEntityRelationshipName": "question",
+      "relationshipName": "form",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "question",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211122021706"
+}

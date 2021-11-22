@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity FormProgresss.
+    -->
+    <changeSet id="20211122021708-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="form_progresss"
+                                 constraintName="fk_form_progresss__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="form_id"
+                                 baseTableName="form_progresss"
+                                 constraintName="fk_form_progresss__form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="form"/>
+    </changeSet>
+</databaseChangeLog>

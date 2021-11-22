@@ -1,0 +1,116 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-form-progresss-heading"
+        data-cy="FormProgresssCreateUpdateHeading"
+        jhiTranslate="rmtMonoliticApp.formProgresss.home.createOrEditLabel"
+      >
+        Create or edit a Form Progresss
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.submited" for="field_submited">Submited</label>
+          <input type="checkbox" class="form-check" name="submited" id="field_submited" data-cy="submited" formControlName="submited" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.startedOn" for="field_startedOn">Started On</label>
+          <div class="d-flex">
+            <input
+              id="field_startedOn"
+              data-cy="startedOn"
+              type="datetime-local"
+              class="form-control"
+              name="startedOn"
+              formControlName="startedOn"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.submitedOn" for="field_submitedOn"
+            >Submited On</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_submitedOn"
+              data-cy="submitedOn"
+              type="datetime-local"
+              class="form-control"
+              name="submitedOn"
+              formControlName="submitedOn"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.sentedOn" for="field_sentedOn">Sented On</label>
+          <div class="d-flex">
+            <input
+              id="field_sentedOn"
+              data-cy="sentedOn"
+              type="datetime-local"
+              class="form-control"
+              name="sentedOn"
+              formControlName="sentedOn"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.user" for="field_user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption"
+              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
+            >
+              {{ userOption.login }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.formProgresss.form" for="field_form">Form</label>
+          <select class="form-control" id="field_form" data-cy="form" name="form" formControlName="form">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="formOption.id === editForm.get('form')!.value?.id ? editForm.get('form')!.value : formOption"
+              *ngFor="let formOption of formsSharedCollection; trackBy: trackFormById"
+            >
+              {{ formOption.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

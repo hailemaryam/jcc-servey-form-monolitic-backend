@@ -1,0 +1,95 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="answer">
+      <h2 data-cy="answerDetailsHeading"><span jhiTranslate="rmtMonoliticApp.answer.detail.title">Answer</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ answer.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.number">Number</span></dt>
+        <dd>
+          <span>{{ answer.number }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.booleanAnswer">Boolean Answer</span></dt>
+        <dd>
+          <span>{{ answer.booleanAnswer }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.shortAnswer">Short Answer</span></dt>
+        <dd>
+          <span>{{ answer.shortAnswer }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.paragraph">Paragraph</span></dt>
+        <dd>
+          <span>{{ answer.paragraph }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.multipleChoice">Multiple Choice</span></dt>
+        <dd>
+          <span>{{ answer.multipleChoice }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.dropDown">Drop Down</span></dt>
+        <dd>
+          <span>{{ answer.dropDown }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.fileUploaded">File Uploaded</span></dt>
+        <dd>
+          <div *ngIf="answer.fileUploaded">
+            <a (click)="openFile(answer.fileUploaded, answer.fileUploadedContentType)" jhiTranslate="entity.action.open">open</a>
+            {{ answer.fileUploadedContentType }}, {{ byteSize(answer.fileUploaded) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.fileName">File Name</span></dt>
+        <dd>
+          <span>{{ answer.fileName }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.date">Date</span></dt>
+        <dd>
+          <span>{{ answer.date | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.time">Time</span></dt>
+        <dd>
+          <span>{{ answer.time | duration }} ({{ answer.time }})</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.submitedOn">Submited On</span></dt>
+        <dd>
+          <span>{{ answer.submitedOn | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.dataType">Data Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'rmtMonoliticApp.DataType.' + answer.dataType }}">{{ answer.dataType }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.user">User</span></dt>
+        <dd>
+          <span>{{ answer.user?.login }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.question">Question</span></dt>
+        <dd>
+          <div *ngIf="answer.question">
+            <a [routerLink]="['/question', answer.question?.id, 'view']">{{ answer.question?.title }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.answer.formProgresss">Form Progresss</span></dt>
+        <dd>
+          <div *ngIf="answer.formProgresss">
+            <a [routerLink]="['/form-progresss', answer.formProgresss?.id, 'view']">{{ answer.formProgresss?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

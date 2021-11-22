@@ -108,6 +108,7 @@
   },
   "defaultProject": "rmt-monolitic",
   "cli": {
+    "analytics": false,
     "packageManager": "npm"
   }
 }

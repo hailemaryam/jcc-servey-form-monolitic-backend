@@ -1,0 +1,53 @@
+{
+  "name": "FormProgresss",
+  "fields": [
+    {
+      "fieldName": "submited",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "startedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "submitedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "sentedOn",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "answer",
+      "otherEntityRelationshipName": "formProgresss",
+      "relationshipName": "answer"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "formProgresss",
+      "relationshipName": "user",
+      "otherEntityField": "login"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "form",
+      "otherEntityRelationshipName": "formProgresss",
+      "relationshipName": "form",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "form_progresss",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211122021708"
+}

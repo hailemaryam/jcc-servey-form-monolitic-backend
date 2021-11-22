@@ -48,6 +48,21 @@ public class CacheConfiguration {
             createCache(cm, et.com.hmmk.rmt.domain.User.class.getName());
             createCache(cm, et.com.hmmk.rmt.domain.Authority.class.getName());
             createCache(cm, et.com.hmmk.rmt.domain.User.class.getName() + ".authorities");
+            createCache(cm, et.com.hmmk.rmt.domain.Form.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.Form.class.getName() + ".formProgressses");
+            createCache(cm, et.com.hmmk.rmt.domain.Form.class.getName() + ".questions");
+            createCache(cm, et.com.hmmk.rmt.domain.Question.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.Question.class.getName() + ".questionChoices");
+            createCache(cm, et.com.hmmk.rmt.domain.Question.class.getName() + ".answers");
+            createCache(cm, et.com.hmmk.rmt.domain.QuestionChoice.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.FormProgresss.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.FormProgresss.class.getName() + ".answers");
+            createCache(cm, et.com.hmmk.rmt.domain.Answer.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.Answer.class.getName() + ".multipleChoiceAnsewers");
+            createCache(cm, et.com.hmmk.rmt.domain.MultipleChoiceAnsewer.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.TypeOfOrganization.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.TypeOfOrganization.class.getName() + ".companies");
+            createCache(cm, et.com.hmmk.rmt.domain.Company.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

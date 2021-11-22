@@ -1,0 +1,11 @@
+id;title;mandatory;data_type
+1;../fake-data/blob/hipster.txt;false;TIME
+2;../fake-data/blob/hipster.txt;false;DROP_DOWN
+3;../fake-data/blob/hipster.txt;true;CHECK_BOX
+4;../fake-data/blob/hipster.txt;false;TIME
+5;../fake-data/blob/hipster.txt;true;TIME
+6;../fake-data/blob/hipster.txt;false;SHORT_ANSWER
+7;../fake-data/blob/hipster.txt;true;TIME
+8;../fake-data/blob/hipster.txt;true;DROP_DOWN
+9;../fake-data/blob/hipster.txt;false;BOOLEAN
+10;../fake-data/blob/hipster.txt;false;SHORT_ANSWER

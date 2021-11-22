@@ -1,0 +1,39 @@
+{
+  "rmtMonoliticApp": {
+    "answer": {
+      "home": {
+        "title": "Answers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Answer",
+        "createOrEditLabel": "Create or edit a Answer",
+        "notFound": "No Answers found"
+      },
+      "created": "A new Answer is created with identifier {{ param }}",
+      "updated": "A Answer is updated with identifier {{ param }}",
+      "deleted": "A Answer is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Answer {{ id }}?"
+      },
+      "detail": {
+        "title": "Answer"
+      },
+      "id": "ID",
+      "number": "Number",
+      "booleanAnswer": "Boolean Answer",
+      "shortAnswer": "Short Answer",
+      "paragraph": "Paragraph",
+      "multipleChoice": "Multiple Choice",
+      "dropDown": "Drop Down",
+      "fileUploaded": "File Uploaded",
+      "fileName": "File Name",
+      "date": "Date",
+      "time": "Time",
+      "submitedOn": "Submited On",
+      "dataType": "Data Type",
+      "multipleChoiceAnsewer": "Multiple Choice Ansewer",
+      "user": "User",
+      "question": "Question",
+      "formProgresss": "Form Progresss"
+    }
+  }
+}

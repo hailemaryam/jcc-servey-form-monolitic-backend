@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity Answer.
+    -->
+    <changeSet id="20211122021709-1" author="jhipster">
+        <createTable tableName="answer">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="boolean_answer" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="short_answer" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="paragraph" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="multiple_choice" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="drop_down" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="file_uploaded" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="file_uploaded_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="date" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="time" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="submited_on" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="question_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="form_progresss_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+        <dropDefaultValue tableName="answer" columnName="date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="answer" columnName="submited_on" columnDataType="${datetimeType}"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20211122021709-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/answer.csv"
+                  separator=";"
+                  tableName="answer"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="number" type="numeric"/>
+            <column name="boolean_answer" type="boolean"/>
+            <column name="short_answer" type="string"/>
+            <column name="paragraph" type="clob"/>
+            <column name="multiple_choice" type="string"/>
+            <column name="drop_down" type="string"/>
+            <column name="file_uploaded" type="blob"/>
+            <column name="file_uploaded_content_type" type="string"/>
+            <column name="file_name" type="string"/>
+            <column name="date" type="date"/>
+            <column name="time" type="numeric"/>
+            <column name="submited_on" type="date"/>
+            <column name="data_type" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

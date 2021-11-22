@@ -1,0 +1,30 @@
+{
+  "rmtMonoliticApp": {
+    "formProgresss": {
+      "home": {
+        "title": "Form Progressses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Form Progresss",
+        "createOrEditLabel": "Create or edit a Form Progresss",
+        "notFound": "No Form Progressses found"
+      },
+      "created": "A new Form Progresss is created with identifier {{ param }}",
+      "updated": "A Form Progresss is updated with identifier {{ param }}",
+      "deleted": "A Form Progresss is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Form Progresss {{ id }}?"
+      },
+      "detail": {
+        "title": "Form Progresss"
+      },
+      "id": "ID",
+      "submited": "Submited",
+      "startedOn": "Started On",
+      "submitedOn": "Submited On",
+      "sentedOn": "Sented On",
+      "answer": "Answer",
+      "user": "User",
+      "form": "Form"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="question">
+      <h2 data-cy="questionDetailsHeading"><span jhiTranslate="rmtMonoliticApp.question.detail.title">Question</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ question.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.question.title">Title</span></dt>
+        <dd>
+          <span>{{ question.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.question.mandatory">Mandatory</span></dt>
+        <dd>
+          <span>{{ question.mandatory }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.question.dataType">Data Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'rmtMonoliticApp.DataType.' + question.dataType }}">{{ question.dataType }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.question.form">Form</span></dt>
+        <dd>
+          <div *ngIf="question.form">
+            <a [routerLink]="['/form', question.form?.id, 'view']">{{ question.form?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/question', question.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

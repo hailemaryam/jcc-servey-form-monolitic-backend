@@ -1,0 +1,94 @@
+{
+  "name": "Answer",
+  "fields": [
+    {
+      "fieldName": "number",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "booleanAnswer",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "shortAnswer",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paragraph",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "multipleChoice",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dropDown",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileUploaded",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "fileName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "time",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "submitedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dataType",
+      "fieldType": "DataType",
+      "fieldValues": "NUMBER,BOOLEAN,SHORT_ANSWER,PARAGRAPH,MULTIPLE_CHOICE,CHECK_BOX,DROP_DOWN,FILE_UPLOAD,DATE,TIME"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "multipleChoiceAnsewer",
+      "otherEntityRelationshipName": "answer",
+      "relationshipName": "multipleChoiceAnsewer"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "answer",
+      "relationshipName": "user",
+      "otherEntityField": "login"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "question",
+      "otherEntityRelationshipName": "answer",
+      "relationshipName": "question",
+      "otherEntityField": "title"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "formProgresss",
+      "otherEntityRelationshipName": "answer",
+      "relationshipName": "formProgresss"
+    }
+  ],
+  "entityTableName": "answer",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211122021709"
+}

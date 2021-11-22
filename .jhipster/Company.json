@@ -1,0 +1,46 @@
+{
+  "name": "Company",
+  "fields": [
+    {
+      "fieldName": "strategicObjective",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "futureFocusArea",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currentFundingCycle",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "company",
+      "relationshipName": "user",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": true,
+      "id": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "typeOfOrganization",
+      "otherEntityRelationshipName": "company",
+      "relationshipName": "typeOfOrganation",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "company",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211122021712"
+}

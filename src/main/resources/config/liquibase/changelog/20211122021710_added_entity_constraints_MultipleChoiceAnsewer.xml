@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity MultipleChoiceAnsewer.
+    -->
+    <changeSet id="20211122021710-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="answer_id"
+                                 baseTableName="multiple_choice_ansewer"
+                                 constraintName="fk_multiple_choice_ansewer__answer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="answer"/>
+    </changeSet>
+</databaseChangeLog>

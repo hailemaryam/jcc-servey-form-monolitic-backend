@@ -1,0 +1,158 @@
+<div>
+  <h2 id="page-heading" data-cy="AnswerHeading">
+    <span jhiTranslate="rmtMonoliticApp.answer.home.title">Answers</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="rmtMonoliticApp.answer.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-answer"
+        [routerLink]="['/answer/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="rmtMonoliticApp.answer.home.createLabel"> Create a new Answer </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="answers?.length === 0">
+    <span jhiTranslate="rmtMonoliticApp.answer.home.notFound">No answers found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="answers && answers.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="number">
+            <span jhiTranslate="rmtMonoliticApp.answer.number">Number</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="booleanAnswer">
+            <span jhiTranslate="rmtMonoliticApp.answer.booleanAnswer">Boolean Answer</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="shortAnswer">
+            <span jhiTranslate="rmtMonoliticApp.answer.shortAnswer">Short Answer</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="paragraph">
+            <span jhiTranslate="rmtMonoliticApp.answer.paragraph">Paragraph</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="multipleChoice">
+            <span jhiTranslate="rmtMonoliticApp.answer.multipleChoice">Multiple Choice</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dropDown">
+            <span jhiTranslate="rmtMonoliticApp.answer.dropDown">Drop Down</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="fileUploaded">
+            <span jhiTranslate="rmtMonoliticApp.answer.fileUploaded">File Uploaded</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="fileName">
+            <span jhiTranslate="rmtMonoliticApp.answer.fileName">File Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="date"><span jhiTranslate="rmtMonoliticApp.answer.date">Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="time"><span jhiTranslate="rmtMonoliticApp.answer.time">Time</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="submitedOn">
+            <span jhiTranslate="rmtMonoliticApp.answer.submitedOn">Submited On</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dataType">
+            <span jhiTranslate="rmtMonoliticApp.answer.dataType">Data Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="user.login">
+            <span jhiTranslate="rmtMonoliticApp.answer.user">User</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="question.title">
+            <span jhiTranslate="rmtMonoliticApp.answer.question">Question</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="formProgresss.id">
+            <span jhiTranslate="rmtMonoliticApp.answer.formProgresss">Form Progresss</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let answer of answers; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/answer', answer.id, 'view']">{{ answer.id }}</a>
+          </td>
+          <td>{{ answer.number }}</td>
+          <td>{{ answer.booleanAnswer }}</td>
+          <td>{{ answer.shortAnswer }}</td>
+          <td>{{ answer.paragraph }}</td>
+          <td>{{ answer.multipleChoice }}</td>
+          <td>{{ answer.dropDown }}</td>
+          <td>
+            <a
+              *ngIf="answer.fileUploaded"
+              (click)="openFile(answer.fileUploaded, answer.fileUploadedContentType)"
+              jhiTranslate="entity.action.open"
+              >open</a
+            >
+            <span *ngIf="answer.fileUploaded">{{ answer.fileUploadedContentType }}, {{ byteSize(answer.fileUploaded) }}</span>
+          </td>
+          <td>{{ answer.fileName }}</td>
+          <td>{{ answer.date | formatMediumDatetime }}</td>
+          <td title="{{ answer.time }}">{{ answer.time | duration }}</td>
+          <td>{{ answer.submitedOn | formatMediumDatetime }}</td>
+          <td jhiTranslate="{{ 'rmtMonoliticApp.DataType.' + answer.dataType }}">{{ answer.dataType }}</td>
+          <td>
+            {{ answer.user?.login }}
+          </td>
+          <td>
+            <div *ngIf="answer.question">
+              <a [routerLink]="['/question', answer.question?.id, 'view']">{{ answer.question?.title }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="answer.formProgresss">
+              <a [routerLink]="['/form-progresss', answer.formProgresss?.id, 'view']">{{ answer.formProgresss?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/answer', answer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/answer', answer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(answer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="answers && answers.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

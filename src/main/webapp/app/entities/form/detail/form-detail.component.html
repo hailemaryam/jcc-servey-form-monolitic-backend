@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="form">
+      <h2 data-cy="formDetailsHeading"><span jhiTranslate="rmtMonoliticApp.form.detail.title">Form</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ form.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.form.name">Name</span></dt>
+        <dd>
+          <span>{{ form.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.form.description">Description</span></dt>
+        <dd>
+          <span>{{ form.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.form.createdOn">Created On</span></dt>
+        <dd>
+          <span>{{ form.createdOn | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.form.updatedOn">Updated On</span></dt>
+        <dd>
+          <span>{{ form.updatedOn | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.form.user">User</span></dt>
+        <dd>
+          <span>{{ form.user?.login }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/form', form.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

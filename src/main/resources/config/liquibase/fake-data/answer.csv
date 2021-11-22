@@ -1,0 +1,11 @@
+id;number;boolean_answer;short_answer;paragraph;multiple_choice;drop_down;file_uploaded;file_uploaded_content_type;file_name;date;time;submited_on;data_type
+1;89987;false;Federation;../fake-data/blob/hipster.txt;quantifying XSS;silver;../fake-data/blob/hipster.png;image/png;Investor Investment Berkshire;2021-11-21T13:15:08;42336;2021-11-21T03:15:51;MULTIPLE_CHOICE
+2;19055;false;maroon web-enabled;../fake-data/blob/hipster.txt;Lead;Cambridgeshire Soap;../fake-data/blob/hipster.png;image/png;Buckinghamshire;2021-11-21T13:43:33;50964;2021-11-21T05:27:22;FILE_UPLOAD
+3;66616;true;RAM;../fake-data/blob/hipster.txt;Metal;dedicated Technician Liaison;../fake-data/blob/hipster.png;image/png;scalable EXE;2021-11-21T09:37:20;91797;2021-11-21T05:33:30;BOOLEAN
+4;15306;false;infrastructures Generic back-end;../fake-data/blob/hipster.txt;Rustic;digital state;../fake-data/blob/hipster.png;image/png;Bike Integration quantifying;2021-11-21T18:17:38;58159;2021-11-21T22:54:45;TIME
+5;99561;true;copying local;../fake-data/blob/hipster.txt;Generic Kina;plug-and-play bypassing;../fake-data/blob/hipster.png;image/png;lavender Internal Federation;2021-11-21T15:40:47;97430;2021-11-21T08:01:04;SHORT_ANSWER
+6;81083;false;ivory Wooden;../fake-data/blob/hipster.txt;Small reciprocal hard;Internal;../fake-data/blob/hipster.png;image/png;Direct Customizable;2021-11-21T15:24:34;86638;2021-11-21T10:37:42;FILE_UPLOAD
+7;81732;true;Loan Bike;../fake-data/blob/hipster.txt;vortals Handcrafted Hat;digital repurpose Legacy;../fake-data/blob/hipster.png;image/png;optimizing;2021-11-21T08:28:16;2960;2021-11-22T01:22:00;NUMBER
+8;32603;false;Intelligent;../fake-data/blob/hipster.txt;virtual online XSS;Accounts;../fake-data/blob/hipster.png;image/png;Borders Group;2021-11-21T04:12:43;15615;2021-11-21T20:17:37;DATE
+9;62467;false;metrics Integrated Polarised;../fake-data/blob/hipster.txt;GB;Hampshire transmitter;../fake-data/blob/hipster.png;image/png;Nauru Pants Cedi;2021-11-21T22:27:18;90916;2021-11-21T10:58:39;FILE_UPLOAD
+10;15840;true;Zambian Factors;../fake-data/blob/hipster.txt;strategic;Avon;../fake-data/blob/hipster.png;image/png;empower Account;2021-11-21T13:17:31;93047;2021-11-21T05:22:18;DROP_DOWN

@@ -15,7 +15,22 @@
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021705_added_entity_Form.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021706_added_entity_Question.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021707_added_entity_QuestionChoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021708_added_entity_FormProgresss.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021709_added_entity_Answer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021710_added_entity_MultipleChoiceAnsewer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021711_added_entity_TypeOfOrganization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021712_added_entity_Company.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20211122021705_added_entity_constraints_Form.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021706_added_entity_constraints_Question.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021707_added_entity_constraints_QuestionChoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021708_added_entity_constraints_FormProgresss.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021709_added_entity_constraints_Answer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021710_added_entity_constraints_MultipleChoiceAnsewer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211122021712_added_entity_constraints_Company.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

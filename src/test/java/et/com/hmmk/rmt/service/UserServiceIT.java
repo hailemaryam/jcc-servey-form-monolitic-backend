@@ -5,7 +5,9 @@ import static org.mockito.Mockito.when;
 
 import et.com.hmmk.rmt.IntegrationTest;
 import et.com.hmmk.rmt.config.Constants;
+import et.com.hmmk.rmt.domain.Company;
 import et.com.hmmk.rmt.domain.User;
+import et.com.hmmk.rmt.repository.CompanyRepository;
 import et.com.hmmk.rmt.repository.UserRepository;
 import et.com.hmmk.rmt.service.dto.AdminUserDTO;
 import java.time.Instant;
@@ -46,6 +48,9 @@ class UserServiceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private UserService userService;
@@ -158,6 +163,10 @@ class UserServiceIT {
         User dbUser = userRepository.saveAndFlush(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
+        Company company = new Company();
+        company.setUser(dbUser);
+        company.setCompanyName("test company");
+        companyRepository.save(company);
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
         assertThat(users).isNotEmpty();
@@ -175,6 +184,7 @@ class UserServiceIT {
         User dbUser = userRepository.saveAndFlush(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
+
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
         assertThat(users).isEmpty();

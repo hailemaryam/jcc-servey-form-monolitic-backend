@@ -235,6 +235,7 @@ class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setCompanyName("test company");
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -250,6 +251,7 @@ class AccountResourceIT {
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
         secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+        secondUser.setCompanyName("test company");
 
         // First user
         restAccountMockMvc
@@ -285,6 +287,7 @@ class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setCompanyName("test company");
 
         // Register first user
         restAccountMockMvc
@@ -304,6 +307,7 @@ class AccountResourceIT {
         secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setLangKey(firstUser.getLangKey());
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+        secondUser.setCompanyName("test company");
 
         // Register second (non activated) user
         restAccountMockMvc

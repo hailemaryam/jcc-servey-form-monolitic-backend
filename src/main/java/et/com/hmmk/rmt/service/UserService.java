@@ -8,7 +8,10 @@ import et.com.hmmk.rmt.repository.UserRepository;
 import et.com.hmmk.rmt.security.AuthoritiesConstants;
 import et.com.hmmk.rmt.security.SecurityUtils;
 import et.com.hmmk.rmt.service.dto.AdminUserDTO;
+import et.com.hmmk.rmt.service.dto.CompanyDTO;
 import et.com.hmmk.rmt.service.dto.UserDTO;
+import et.com.hmmk.rmt.service.mapper.UserMapper;
+import et.com.hmmk.rmt.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -41,16 +44,24 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final CompanyService companyService;
+
+    private final UserMapper userMapper;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        CompanyService companyService,
+        UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.companyService = companyService;
+        this.userMapper = userMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -129,7 +140,13 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        if (companyService.findOne(newUser.getId()).isEmpty()) {
+            CompanyDTO companyDTO = new CompanyDTO();
+            companyDTO.setCompanyName(userDTO.getCompanyName());
+            companyDTO.setUser(userMapper.userToUserDTO(savedUser));
+            companyService.save(companyDTO);
+        }
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -139,6 +156,7 @@ public class UserService {
         if (existingUser.isActivated()) {
             return false;
         }
+        companyService.delete(existingUser.getId());
         userRepository.delete(existingUser);
         userRepository.flush();
         this.clearUserCaches(existingUser);
@@ -222,6 +240,7 @@ public class UserService {
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
+                companyService.delete(user.getId());
                 userRepository.delete(user);
                 this.clearUserCaches(user);
                 log.debug("Deleted User: {}", user);
@@ -302,6 +321,7 @@ public class UserService {
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
             .forEach(user -> {
                 log.debug("Deleting not activated user {}", user.getLogin());
+                companyService.delete(user.getId());
                 userRepository.delete(user);
                 this.clearUserCaches(user);
             });

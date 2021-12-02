@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import et.com.hmmk.rmt.IntegrationTest;
 import et.com.hmmk.rmt.domain.Authority;
+import et.com.hmmk.rmt.domain.Company;
 import et.com.hmmk.rmt.domain.User;
+import et.com.hmmk.rmt.repository.CompanyRepository;
 import et.com.hmmk.rmt.repository.UserRepository;
 import et.com.hmmk.rmt.security.AuthoritiesConstants;
 import et.com.hmmk.rmt.service.dto.AdminUserDTO;
@@ -63,6 +65,9 @@ class UserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -467,15 +472,19 @@ class UserResourceIT {
     @Transactional
     void deleteUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        User userCreated = userRepository.saveAndFlush(this.user);
+        Company company = new Company();
+        company.setUser(userCreated);
+        company.setCompanyName("test company name");
+        companyRepository.save(company);
         int databaseSizeBeforeDelete = userRepository.findAll().size();
 
         // Delete the user
         restUserMockMvc
-            .perform(delete("/api/admin/users/{login}", user.getLogin()).accept(MediaType.APPLICATION_JSON))
+            .perform(delete("/api/admin/users/{login}", this.user.getLogin()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(this.user.getLogin())).isNull();
 
         // Validate the database is empty
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeDelete - 1));

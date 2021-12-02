@@ -24,6 +24,7 @@ export class CompanyUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    companyName: [],
     strategicObjective: [],
     futureFocusArea: [],
     currentFundingCycle: [],
@@ -91,6 +92,7 @@ export class CompanyUpdateComponent implements OnInit {
   protected updateForm(company: ICompany): void {
     this.editForm.patchValue({
       id: company.id,
+      companyName: company.companyName,
       strategicObjective: company.strategicObjective,
       futureFocusArea: company.futureFocusArea,
       currentFundingCycle: company.currentFundingCycle,
@@ -130,6 +132,7 @@ export class CompanyUpdateComponent implements OnInit {
     return {
       ...new Company(),
       id: this.editForm.get(['id'])!.value,
+      companyName: this.editForm.get(['companyName'])!.value,
       strategicObjective: this.editForm.get(['strategicObjective'])!.value,
       futureFocusArea: this.editForm.get(['futureFocusArea'])!.value,
       currentFundingCycle: this.editForm.get(['currentFundingCycle'])!.value,

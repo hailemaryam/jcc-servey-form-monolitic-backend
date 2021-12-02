@@ -18,6 +18,7 @@
         "title": "Company"
       },
       "id": "ID",
+      "companyName": "Company Name",
       "strategicObjective": "Strategic Objective",
       "futureFocusArea": "Future Focus Area",
       "currentFundingCycle": "Current Funding Cycle",

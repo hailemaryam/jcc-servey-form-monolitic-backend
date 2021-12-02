@@ -26,6 +26,8 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter companyName;
+
     private StringFilter strategicObjective;
 
     private StringFilter futureFocusArea;
@@ -42,6 +44,7 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     public CompanyCriteria(CompanyCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.companyName = other.companyName == null ? null : other.companyName.copy();
         this.strategicObjective = other.strategicObjective == null ? null : other.strategicObjective.copy();
         this.futureFocusArea = other.futureFocusArea == null ? null : other.futureFocusArea.copy();
         this.currentFundingCycle = other.currentFundingCycle == null ? null : other.currentFundingCycle.copy();
@@ -68,6 +71,21 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getCompanyName() {
+        return companyName;
+    }
+
+    public StringFilter companyName() {
+        if (companyName == null) {
+            companyName = new StringFilter();
+        }
+        return companyName;
+    }
+
+    public void setCompanyName(StringFilter companyName) {
+        this.companyName = companyName;
     }
 
     public StringFilter getStrategicObjective() {
@@ -164,6 +182,7 @@ public class CompanyCriteria implements Serializable, Criteria {
         final CompanyCriteria that = (CompanyCriteria) o;
         return (
             Objects.equals(id, that.id) &&
+            Objects.equals(companyName, that.companyName) &&
             Objects.equals(strategicObjective, that.strategicObjective) &&
             Objects.equals(futureFocusArea, that.futureFocusArea) &&
             Objects.equals(currentFundingCycle, that.currentFundingCycle) &&
@@ -175,7 +194,16 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, strategicObjective, futureFocusArea, currentFundingCycle, userId, typeOfOrganationId, distinct);
+        return Objects.hash(
+            id,
+            companyName,
+            strategicObjective,
+            futureFocusArea,
+            currentFundingCycle,
+            userId,
+            typeOfOrganationId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -183,6 +211,7 @@ public class CompanyCriteria implements Serializable, Criteria {
     public String toString() {
         return "CompanyCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
+            (companyName != null ? "companyName=" + companyName + ", " : "") +
             (strategicObjective != null ? "strategicObjective=" + strategicObjective + ", " : "") +
             (futureFocusArea != null ? "futureFocusArea=" + futureFocusArea + ", " : "") +
             (currentFundingCycle != null ? "currentFundingCycle=" + currentFundingCycle + ", " : "") +

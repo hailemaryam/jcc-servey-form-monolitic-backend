@@ -34,6 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class CompanyResourceIT {
 
+    private static final String DEFAULT_COMPANY_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_COMPANY_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_STRATEGIC_OBJECTIVE = "AAAAAAAAAA";
     private static final String UPDATED_STRATEGIC_OBJECTIVE = "BBBBBBBBBB";
 
@@ -71,6 +74,7 @@ class CompanyResourceIT {
      */
     public static Company createEntity(EntityManager em) {
         Company company = new Company()
+            .companyName(DEFAULT_COMPANY_NAME)
             .strategicObjective(DEFAULT_STRATEGIC_OBJECTIVE)
             .futureFocusArea(DEFAULT_FUTURE_FOCUS_AREA)
             .currentFundingCycle(DEFAULT_CURRENT_FUNDING_CYCLE);
@@ -90,6 +94,7 @@ class CompanyResourceIT {
      */
     public static Company createUpdatedEntity(EntityManager em) {
         Company company = new Company()
+            .companyName(UPDATED_COMPANY_NAME)
             .strategicObjective(UPDATED_STRATEGIC_OBJECTIVE)
             .futureFocusArea(UPDATED_FUTURE_FOCUS_AREA)
             .currentFundingCycle(UPDATED_CURRENT_FUNDING_CYCLE);
@@ -120,6 +125,7 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeCreate + 1);
         Company testCompany = companyList.get(companyList.size() - 1);
+        assertThat(testCompany.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
         assertThat(testCompany.getStrategicObjective()).isEqualTo(DEFAULT_STRATEGIC_OBJECTIVE);
         assertThat(testCompany.getFutureFocusArea()).isEqualTo(DEFAULT_FUTURE_FOCUS_AREA);
         assertThat(testCompany.getCurrentFundingCycle()).isEqualTo(DEFAULT_CURRENT_FUNDING_CYCLE);
@@ -201,6 +207,7 @@ class CompanyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
+            .andExpect(jsonPath("$.[*].companyName").value(hasItem(DEFAULT_COMPANY_NAME)))
             .andExpect(jsonPath("$.[*].strategicObjective").value(hasItem(DEFAULT_STRATEGIC_OBJECTIVE)))
             .andExpect(jsonPath("$.[*].futureFocusArea").value(hasItem(DEFAULT_FUTURE_FOCUS_AREA)))
             .andExpect(jsonPath("$.[*].currentFundingCycle").value(hasItem(DEFAULT_CURRENT_FUNDING_CYCLE)));
@@ -218,6 +225,7 @@ class CompanyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(company.getId().intValue()))
+            .andExpect(jsonPath("$.companyName").value(DEFAULT_COMPANY_NAME))
             .andExpect(jsonPath("$.strategicObjective").value(DEFAULT_STRATEGIC_OBJECTIVE))
             .andExpect(jsonPath("$.futureFocusArea").value(DEFAULT_FUTURE_FOCUS_AREA))
             .andExpect(jsonPath("$.currentFundingCycle").value(DEFAULT_CURRENT_FUNDING_CYCLE));
@@ -239,6 +247,84 @@ class CompanyResourceIT {
 
         defaultCompanyShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCompanyShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName equals to DEFAULT_COMPANY_NAME
+        defaultCompanyShouldBeFound("companyName.equals=" + DEFAULT_COMPANY_NAME);
+
+        // Get all the companyList where companyName equals to UPDATED_COMPANY_NAME
+        defaultCompanyShouldNotBeFound("companyName.equals=" + UPDATED_COMPANY_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName not equals to DEFAULT_COMPANY_NAME
+        defaultCompanyShouldNotBeFound("companyName.notEquals=" + DEFAULT_COMPANY_NAME);
+
+        // Get all the companyList where companyName not equals to UPDATED_COMPANY_NAME
+        defaultCompanyShouldBeFound("companyName.notEquals=" + UPDATED_COMPANY_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName in DEFAULT_COMPANY_NAME or UPDATED_COMPANY_NAME
+        defaultCompanyShouldBeFound("companyName.in=" + DEFAULT_COMPANY_NAME + "," + UPDATED_COMPANY_NAME);
+
+        // Get all the companyList where companyName equals to UPDATED_COMPANY_NAME
+        defaultCompanyShouldNotBeFound("companyName.in=" + UPDATED_COMPANY_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName is not null
+        defaultCompanyShouldBeFound("companyName.specified=true");
+
+        // Get all the companyList where companyName is null
+        defaultCompanyShouldNotBeFound("companyName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameContainsSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName contains DEFAULT_COMPANY_NAME
+        defaultCompanyShouldBeFound("companyName.contains=" + DEFAULT_COMPANY_NAME);
+
+        // Get all the companyList where companyName contains UPDATED_COMPANY_NAME
+        defaultCompanyShouldNotBeFound("companyName.contains=" + UPDATED_COMPANY_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByCompanyNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where companyName does not contain DEFAULT_COMPANY_NAME
+        defaultCompanyShouldNotBeFound("companyName.doesNotContain=" + DEFAULT_COMPANY_NAME);
+
+        // Get all the companyList where companyName does not contain UPDATED_COMPANY_NAME
+        defaultCompanyShouldBeFound("companyName.doesNotContain=" + UPDATED_COMPANY_NAME);
     }
 
     @Test
@@ -525,6 +611,7 @@ class CompanyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
+            .andExpect(jsonPath("$.[*].companyName").value(hasItem(DEFAULT_COMPANY_NAME)))
             .andExpect(jsonPath("$.[*].strategicObjective").value(hasItem(DEFAULT_STRATEGIC_OBJECTIVE)))
             .andExpect(jsonPath("$.[*].futureFocusArea").value(hasItem(DEFAULT_FUTURE_FOCUS_AREA)))
             .andExpect(jsonPath("$.[*].currentFundingCycle").value(hasItem(DEFAULT_CURRENT_FUNDING_CYCLE)));
@@ -576,6 +663,7 @@ class CompanyResourceIT {
         // Disconnect from session so that the updates on updatedCompany are not directly saved in db
         em.detach(updatedCompany);
         updatedCompany
+            .companyName(UPDATED_COMPANY_NAME)
             .strategicObjective(UPDATED_STRATEGIC_OBJECTIVE)
             .futureFocusArea(UPDATED_FUTURE_FOCUS_AREA)
             .currentFundingCycle(UPDATED_CURRENT_FUNDING_CYCLE);
@@ -593,6 +681,7 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
         Company testCompany = companyList.get(companyList.size() - 1);
+        assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
         assertThat(testCompany.getStrategicObjective()).isEqualTo(UPDATED_STRATEGIC_OBJECTIVE);
         assertThat(testCompany.getFutureFocusArea()).isEqualTo(UPDATED_FUTURE_FOCUS_AREA);
         assertThat(testCompany.getCurrentFundingCycle()).isEqualTo(UPDATED_CURRENT_FUNDING_CYCLE);
@@ -675,7 +764,7 @@ class CompanyResourceIT {
         Company partialUpdatedCompany = new Company();
         partialUpdatedCompany.setId(company.getId());
 
-        partialUpdatedCompany.futureFocusArea(UPDATED_FUTURE_FOCUS_AREA).currentFundingCycle(UPDATED_CURRENT_FUNDING_CYCLE);
+        partialUpdatedCompany.strategicObjective(UPDATED_STRATEGIC_OBJECTIVE).futureFocusArea(UPDATED_FUTURE_FOCUS_AREA);
 
         restCompanyMockMvc
             .perform(
@@ -689,9 +778,10 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
         Company testCompany = companyList.get(companyList.size() - 1);
-        assertThat(testCompany.getStrategicObjective()).isEqualTo(DEFAULT_STRATEGIC_OBJECTIVE);
+        assertThat(testCompany.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
+        assertThat(testCompany.getStrategicObjective()).isEqualTo(UPDATED_STRATEGIC_OBJECTIVE);
         assertThat(testCompany.getFutureFocusArea()).isEqualTo(UPDATED_FUTURE_FOCUS_AREA);
-        assertThat(testCompany.getCurrentFundingCycle()).isEqualTo(UPDATED_CURRENT_FUNDING_CYCLE);
+        assertThat(testCompany.getCurrentFundingCycle()).isEqualTo(DEFAULT_CURRENT_FUNDING_CYCLE);
     }
 
     @Test
@@ -707,6 +797,7 @@ class CompanyResourceIT {
         partialUpdatedCompany.setId(company.getId());
 
         partialUpdatedCompany
+            .companyName(UPDATED_COMPANY_NAME)
             .strategicObjective(UPDATED_STRATEGIC_OBJECTIVE)
             .futureFocusArea(UPDATED_FUTURE_FOCUS_AREA)
             .currentFundingCycle(UPDATED_CURRENT_FUNDING_CYCLE);
@@ -723,6 +814,7 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
         Company testCompany = companyList.get(companyList.size() - 1);
+        assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
         assertThat(testCompany.getStrategicObjective()).isEqualTo(UPDATED_STRATEGIC_OBJECTIVE);
         assertThat(testCompany.getFutureFocusArea()).isEqualTo(UPDATED_FUTURE_FOCUS_AREA);
         assertThat(testCompany.getCurrentFundingCycle()).isEqualTo(UPDATED_CURRENT_FUNDING_CYCLE);

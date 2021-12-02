@@ -20,6 +20,9 @@ public class Company implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "company_name")
+    private String companyName;
+
     @Column(name = "strategic_objective")
     private String strategicObjective;
 
@@ -51,6 +54,19 @@ public class Company implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyName() {
+        return this.companyName;
+    }
+
+    public Company companyName(String companyName) {
+        this.setCompanyName(companyName);
+        return this;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getStrategicObjective() {
@@ -142,6 +158,7 @@ public class Company implements Serializable {
     public String toString() {
         return "Company{" +
             "id=" + getId() +
+            ", companyName='" + getCompanyName() + "'" +
             ", strategicObjective='" + getStrategicObjective() + "'" +
             ", futureFocusArea='" + getFutureFocusArea() + "'" +
             ", currentFundingCycle='" + getCurrentFundingCycle() + "'" +

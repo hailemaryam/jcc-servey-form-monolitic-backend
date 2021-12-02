@@ -2,6 +2,10 @@
   "name": "Company",
   "fields": [
     {
+      "fieldName": "companyName",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "strategicObjective",
       "fieldType": "String"
     },

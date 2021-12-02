@@ -90,6 +90,9 @@ public class CompanyQueryService extends QueryService<Company> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Company_.id));
             }
+            if (criteria.getCompanyName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompanyName(), Company_.companyName));
+            }
             if (criteria.getStrategicObjective() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getStrategicObjective(), Company_.strategicObjective));
             }

@@ -33,6 +33,9 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="companyName">
+            <span jhiTranslate="rmtMonoliticApp.company.companyName">Company Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="strategicObjective">
             <span jhiTranslate="rmtMonoliticApp.company.strategicObjective">Strategic Objective</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -56,6 +59,7 @@
           <td>
             <a [routerLink]="['/company', company.id, 'view']">{{ company.id }}</a>
           </td>
+          <td>{{ company.companyName }}</td>
           <td>{{ company.strategicObjective }}</td>
           <td>{{ company.futureFocusArea }}</td>
           <td>{{ company.currentFundingCycle }}</td>

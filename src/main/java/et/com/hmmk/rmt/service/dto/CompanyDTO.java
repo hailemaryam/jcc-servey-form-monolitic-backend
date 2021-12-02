@@ -10,6 +10,8 @@ public class CompanyDTO implements Serializable {
 
     private Long id;
 
+    private String companyName;
+
     private String strategicObjective;
 
     private String futureFocusArea;
@@ -26,6 +28,14 @@ public class CompanyDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getStrategicObjective() {
@@ -94,6 +104,7 @@ public class CompanyDTO implements Serializable {
     public String toString() {
         return "CompanyDTO{" +
             "id=" + getId() +
+            ", companyName='" + getCompanyName() + "'" +
             ", strategicObjective='" + getStrategicObjective() + "'" +
             ", futureFocusArea='" + getFutureFocusArea() + "'" +
             ", currentFundingCycle='" + getCurrentFundingCycle() + "'" +

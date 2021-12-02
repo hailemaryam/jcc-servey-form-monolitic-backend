@@ -14,6 +14,9 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="company_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="strategic_objective" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -47,6 +50,7 @@
                   tableName="company"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
+            <column name="company_name" type="string"/>
             <column name="strategic_objective" type="string"/>
             <column name="future_focus_area" type="string"/>
             <column name="current_funding_cycle" type="string"/>

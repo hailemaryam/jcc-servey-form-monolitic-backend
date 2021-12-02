@@ -21,6 +21,7 @@ describe('Company Service', () => {
 
     elemDefault = {
       id: 0,
+      companyName: 'AAAAAAA',
       strategicObjective: 'AAAAAAA',
       futureFocusArea: 'AAAAAAA',
       currentFundingCycle: 'AAAAAAA',
@@ -59,6 +60,7 @@ describe('Company Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          companyName: 'BBBBBB',
           strategicObjective: 'BBBBBB',
           futureFocusArea: 'BBBBBB',
           currentFundingCycle: 'BBBBBB',
@@ -78,7 +80,7 @@ describe('Company Service', () => {
     it('should partial update a Company', () => {
       const patchObject = Object.assign(
         {
-          futureFocusArea: 'BBBBBB',
+          strategicObjective: 'BBBBBB',
         },
         new Company()
       );
@@ -98,6 +100,7 @@ describe('Company Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          companyName: 'BBBBBB',
           strategicObjective: 'BBBBBB',
           futureFocusArea: 'BBBBBB',
           currentFundingCycle: 'BBBBBB',

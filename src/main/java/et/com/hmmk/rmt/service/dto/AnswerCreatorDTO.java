@@ -4,7 +4,7 @@ import et.com.hmmk.rmt.domain.enumeration.DataType;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Lob;
@@ -46,7 +46,7 @@ public class AnswerCreatorDTO implements Serializable {
 
     private FormProgresssDTO formProgresss;
 
-    private Set<MultipleChoiceAnsewerDTO> multipleChoiceAnsewerDTOS = new HashSet<>();
+    private List<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers;
 
     public Long getId() {
         return id;
@@ -184,12 +184,12 @@ public class AnswerCreatorDTO implements Serializable {
         this.formProgresss = formProgresss;
     }
 
-    public Set<MultipleChoiceAnsewerDTO> getMultipleChoiceAnsewerDTOS() {
-        return multipleChoiceAnsewerDTOS;
+    public List<MultipleChoiceAnsewerDTO> getMultipleChoiceAnsewers() {
+        return multipleChoiceAnsewers;
     }
 
-    public void setMultipleChoiceAnsewerDTOS(Set<MultipleChoiceAnsewerDTO> multipleChoiceAnsewerDTOS) {
-        this.multipleChoiceAnsewerDTOS = multipleChoiceAnsewerDTOS;
+    public void setMultipleChoiceAnsewers(List<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers) {
+        this.multipleChoiceAnsewers = multipleChoiceAnsewers;
     }
 
     @Override

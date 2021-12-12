@@ -97,7 +97,7 @@ public class FormCreatorResource {
         FormDTO formDTO = new FormDTO();
         formDTO.setId(formCreatorDTO.getId());
         formDTO.setName(formCreatorDTO.getName());
-        formCreatorDTO.setDescription(formCreatorDTO.getDescription());
+        formDTO.setDescription(formCreatorDTO.getDescription());
         formDTO.setCreatedOn(formCreatorDTO.getCreatedOn());
         formDTO.setUpdatedOn(formCreatorDTO.getUpdatedOn());
         formDTO.setUser(formCreatorDTO.getUser());

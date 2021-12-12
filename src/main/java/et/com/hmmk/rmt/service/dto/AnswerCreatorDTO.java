@@ -46,7 +46,7 @@ public class AnswerCreatorDTO implements Serializable {
 
     private FormProgresssDTO formProgresss;
 
-    private List<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers;
+    private Set<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers;
 
     public Long getId() {
         return id;
@@ -184,11 +184,11 @@ public class AnswerCreatorDTO implements Serializable {
         this.formProgresss = formProgresss;
     }
 
-    public List<MultipleChoiceAnsewerDTO> getMultipleChoiceAnsewers() {
+    public Set<MultipleChoiceAnsewerDTO> getMultipleChoiceAnsewers() {
         return multipleChoiceAnsewers;
     }
 
-    public void setMultipleChoiceAnsewers(List<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers) {
+    public void setMultipleChoiceAnsewers(Set<MultipleChoiceAnsewerDTO> multipleChoiceAnsewers) {
         this.multipleChoiceAnsewers = multipleChoiceAnsewers;
     }
 

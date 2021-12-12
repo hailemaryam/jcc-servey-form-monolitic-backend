@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,11 +91,14 @@ public class AnswerCreatorResource {
             throw new BadRequestAlertException("A new answer cannot already have an ID", ENTITY_NAME, "idexists");
         }
         AnswerDTO answerDTO = toAnswerDto(answerCreatorDTO);
+        answerDTO.setUser(answerCreatorDTO.getFormProgresss().getUser());
         AnswerDTO result = answerService.save(answerDTO);
-        for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : answerCreatorDTO.getMultipleChoiceAnsewers()) {
-            multipleChoiceAnsewerDTO.setAnswer(result);
-            MultipleChoiceAnsewerDTO savedMultipleChoice = multipleChoiceAnsewerService.save(multipleChoiceAnsewerDTO);
-            multipleChoiceAnsewerDTO.setId(savedMultipleChoice.getId());
+        if (answerCreatorDTO.getMultipleChoiceAnsewers() != null) {
+            for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : answerCreatorDTO.getMultipleChoiceAnsewers()) {
+                multipleChoiceAnsewerDTO.setAnswer(result);
+                MultipleChoiceAnsewerDTO savedMultipleChoice = multipleChoiceAnsewerService.save(multipleChoiceAnsewerDTO);
+                multipleChoiceAnsewerDTO.setId(savedMultipleChoice.getId());
+            }
         }
         return ResponseEntity
             .created(new URI("/api/answers/" + result.getId()))
@@ -129,6 +133,7 @@ public class AnswerCreatorResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         AnswerDTO answerDTO = toAnswerDto(answerCreatorDTO);
+        answerDTO.setUser(answerCreatorDTO.getFormProgresss().getUser());
         AnswerDTO result = answerService.save(answerDTO);
         MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
         LongFilter longFilter = new LongFilter();
@@ -140,10 +145,12 @@ public class AnswerCreatorResource {
         multipleChoiceAnsewerDTOList.forEach(multipleChoiceAnsewerDTO -> {
             multipleChoiceAnsewerRepository.delete(multipleChoiceAnsewerMapper.toEntity(multipleChoiceAnsewerDTO));
         });
-        for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : answerCreatorDTO.getMultipleChoiceAnsewers()) {
-            multipleChoiceAnsewerDTO.setAnswer(result);
-            MultipleChoiceAnsewerDTO savedMultipleChoice = multipleChoiceAnsewerService.save(multipleChoiceAnsewerDTO);
-            multipleChoiceAnsewerDTO.setId(savedMultipleChoice.getId());
+        if (answerCreatorDTO.getMultipleChoiceAnsewers() != null) {
+            for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : answerCreatorDTO.getMultipleChoiceAnsewers()) {
+                multipleChoiceAnsewerDTO.setAnswer(result);
+                MultipleChoiceAnsewerDTO savedMultipleChoice = multipleChoiceAnsewerService.save(multipleChoiceAnsewerDTO);
+                multipleChoiceAnsewerDTO.setId(savedMultipleChoice.getId());
+            }
         }
         return ResponseEntity
             .ok()
@@ -205,7 +212,9 @@ public class AnswerCreatorResource {
         LongFilter answerFilter = new LongFilter();
         answerFilter.setEquals(answerDto.getId());
         multipleChoiceAnsewerCriteria.setAnswerId(answerFilter);
-        answerCreatorDto.setMultipleChoiceAnsewers(multipleChoiceAnsewerQueryService.findByCriteria(multipleChoiceAnsewerCriteria));
+        answerCreatorDto.setMultipleChoiceAnsewers(
+            multipleChoiceAnsewerQueryService.findByCriteria(multipleChoiceAnsewerCriteria).stream().collect(Collectors.toSet())
+        );
         return answerCreatorDto;
     }
 }

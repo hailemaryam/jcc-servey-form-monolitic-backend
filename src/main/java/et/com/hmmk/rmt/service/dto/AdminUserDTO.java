@@ -50,6 +50,8 @@ public class AdminUserDTO {
 
     private String companyName;
 
+    private TypeOfOrganizationDTO typeOfOrganizationDTO;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -180,6 +182,14 @@ public class AdminUserDTO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public TypeOfOrganizationDTO getTypeOfOrganizationDTO() {
+        return typeOfOrganizationDTO;
+    }
+
+    public void setTypeOfOrganizationDTO(TypeOfOrganizationDTO typeOfOrganizationDTO) {
+        this.typeOfOrganizationDTO = typeOfOrganizationDTO;
     }
 
     // prettier-ignore

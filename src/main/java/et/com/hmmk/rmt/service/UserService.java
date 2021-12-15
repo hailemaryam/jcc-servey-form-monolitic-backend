@@ -144,6 +144,7 @@ public class UserService {
         if (companyService.findOne(newUser.getId()).isEmpty()) {
             CompanyDTO companyDTO = new CompanyDTO();
             companyDTO.setCompanyName(userDTO.getCompanyName());
+            companyDTO.setTypeOfOrganation(userDTO.getTypeOfOrganizationDTO());
             companyDTO.setUser(userMapper.userToUserDTO(savedUser));
             companyService.save(companyDTO);
         }

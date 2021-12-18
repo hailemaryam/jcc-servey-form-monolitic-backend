@@ -12,6 +12,7 @@ import et.com.hmmk.rmt.service.dto.AnswerCreatorDTO;
 import et.com.hmmk.rmt.service.dto.AnswerDTO;
 import et.com.hmmk.rmt.service.dto.MultipleChoiceAnsewerDTO;
 import et.com.hmmk.rmt.service.mapper.MultipleChoiceAnsewerMapper;
+import et.com.hmmk.rmt.service.utility.FileStoreService;
 import et.com.hmmk.rmt.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -59,6 +60,8 @@ public class AnswerCreatorResource {
 
     private final AnswerQueryService answerQueryService;
 
+    private final FileStoreService fileStoreService;
+
     public AnswerCreatorResource(
         AnswerService answerService,
         AnswerRepository answerRepository,
@@ -66,7 +69,8 @@ public class AnswerCreatorResource {
         MultipleChoiceAnsewerService multipleChoiceAnsewerService,
         MultipleChoiceAnsewerQueryService multipleChoiceAnsewerQueryService,
         MultipleChoiceAnsewerMapper multipleChoiceAnsewerMapper,
-        AnswerQueryService answerQueryService
+        AnswerQueryService answerQueryService,
+        FileStoreService fileStoreService
     ) {
         this.answerService = answerService;
         this.answerRepository = answerRepository;
@@ -75,6 +79,7 @@ public class AnswerCreatorResource {
         this.multipleChoiceAnsewerQueryService = multipleChoiceAnsewerQueryService;
         this.multipleChoiceAnsewerMapper = multipleChoiceAnsewerMapper;
         this.answerQueryService = answerQueryService;
+        this.fileStoreService = fileStoreService;
     }
 
     /**
@@ -92,6 +97,11 @@ public class AnswerCreatorResource {
         }
         AnswerDTO answerDTO = toAnswerDto(answerCreatorDTO);
         answerDTO.setUser(answerCreatorDTO.getFormProgresss().getUser());
+        answerDTO.setFileName(
+            fileStoreService.store(answerDTO.getFileUploaded(), answerDTO.getFileUploadedContentType(), answerCreatorDTO.getFileName())
+        );
+        answerDTO.setFileUploadedContentType(null);
+        answerDTO.setFileUploadedContentType(null);
         AnswerDTO result = answerService.save(answerDTO);
         if (answerCreatorDTO.getMultipleChoiceAnsewers() != null) {
             for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : answerCreatorDTO.getMultipleChoiceAnsewers()) {
@@ -134,6 +144,13 @@ public class AnswerCreatorResource {
         }
         AnswerDTO answerDTO = toAnswerDto(answerCreatorDTO);
         answerDTO.setUser(answerCreatorDTO.getFormProgresss().getUser());
+        if (answerDTO.getFileUploadedContentType() != null && answerDTO.getFileUploaded() != null) {
+            answerDTO.setFileName(
+                fileStoreService.store(answerDTO.getFileUploaded(), answerDTO.getFileUploadedContentType(), answerCreatorDTO.getFileName())
+            );
+            answerDTO.setFileUploadedContentType(null);
+            answerDTO.setFileUploadedContentType(null);
+        }
         AnswerDTO result = answerService.save(answerDTO);
         MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
         LongFilter longFilter = new LongFilter();

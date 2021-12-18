@@ -36,6 +36,8 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     private LongFilter userId;
 
+    private LongFilter projectId;
+
     private LongFilter typeOfOrganationId;
 
     private Boolean distinct;
@@ -49,6 +51,7 @@ public class CompanyCriteria implements Serializable, Criteria {
         this.futureFocusArea = other.futureFocusArea == null ? null : other.futureFocusArea.copy();
         this.currentFundingCycle = other.currentFundingCycle == null ? null : other.currentFundingCycle.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.projectId = other.projectId == null ? null : other.projectId.copy();
         this.typeOfOrganationId = other.typeOfOrganationId == null ? null : other.typeOfOrganationId.copy();
         this.distinct = other.distinct;
     }
@@ -148,6 +151,21 @@ public class CompanyCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public LongFilter getProjectId() {
+        return projectId;
+    }
+
+    public LongFilter projectId() {
+        if (projectId == null) {
+            projectId = new LongFilter();
+        }
+        return projectId;
+    }
+
+    public void setProjectId(LongFilter projectId) {
+        this.projectId = projectId;
+    }
+
     public LongFilter getTypeOfOrganationId() {
         return typeOfOrganationId;
     }
@@ -187,6 +205,7 @@ public class CompanyCriteria implements Serializable, Criteria {
             Objects.equals(futureFocusArea, that.futureFocusArea) &&
             Objects.equals(currentFundingCycle, that.currentFundingCycle) &&
             Objects.equals(userId, that.userId) &&
+            Objects.equals(projectId, that.projectId) &&
             Objects.equals(typeOfOrganationId, that.typeOfOrganationId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -201,6 +220,7 @@ public class CompanyCriteria implements Serializable, Criteria {
             futureFocusArea,
             currentFundingCycle,
             userId,
+            projectId,
             typeOfOrganationId,
             distinct
         );
@@ -216,6 +236,7 @@ public class CompanyCriteria implements Serializable, Criteria {
             (futureFocusArea != null ? "futureFocusArea=" + futureFocusArea + ", " : "") +
             (currentFundingCycle != null ? "currentFundingCycle=" + currentFundingCycle + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
+            (projectId != null ? "projectId=" + projectId + ", " : "") +
             (typeOfOrganationId != null ? "typeOfOrganationId=" + typeOfOrganationId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

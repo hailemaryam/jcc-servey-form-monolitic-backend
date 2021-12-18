@@ -24,7 +24,8 @@
       "sentedOn": "Sented On",
       "answer": "Answer",
       "user": "User",
-      "form": "Form"
+      "form": "Form",
+      "project": "Project"
     }
   }
 }

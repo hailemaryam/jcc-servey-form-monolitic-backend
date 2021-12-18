@@ -30,6 +30,13 @@
       "id": true
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "project",
+      "otherEntityRelationshipName": "company",
+      "relationshipName": "project",
+      "otherEntityField": "projectName"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "typeOfOrganization",
       "otherEntityRelationshipName": "company",

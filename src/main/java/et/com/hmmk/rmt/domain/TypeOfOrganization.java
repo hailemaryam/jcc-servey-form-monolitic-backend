@@ -35,7 +35,7 @@ public class TypeOfOrganization implements Serializable {
 
     @OneToMany(mappedBy = "typeOfOrganation")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "user", "typeOfOrganation" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "projects", "typeOfOrganation" }, allowSetters = true)
     private Set<Company> companies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

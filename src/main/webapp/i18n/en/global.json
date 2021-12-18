@@ -15,6 +15,7 @@
         "multipleChoiceAnsewer": "Multiple Choice Ansewer",
         "typeOfOrganization": "Type Of Organization",
         "company": "Company",
+        "project": "Project",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

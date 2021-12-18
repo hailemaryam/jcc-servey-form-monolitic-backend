@@ -84,7 +84,7 @@ public class Answer implements Serializable {
     private Question question;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "answers", "user", "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "answers", "user", "form", "project" }, allowSetters = true)
     private FormProgresss formProgresss;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

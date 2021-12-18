@@ -38,6 +38,13 @@
       "otherEntityRelationshipName": "formProgresss",
       "relationshipName": "form",
       "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "project",
+      "otherEntityRelationshipName": "formProgress",
+      "relationshipName": "project",
+      "otherEntityField": "projectName"
     }
   ],
   "entityTableName": "form_progresss",

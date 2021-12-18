@@ -51,6 +51,9 @@
           <th scope="col" jhiSortBy="form.name">
             <span jhiTranslate="rmtMonoliticApp.formProgresss.form">Form</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="project.projectName">
+            <span jhiTranslate="rmtMonoliticApp.formProgresss.project">Project</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -69,6 +72,11 @@
           <td>
             <div *ngIf="formProgresss.form">
               <a [routerLink]="['/form', formProgresss.form?.id, 'view']">{{ formProgresss.form?.name }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="formProgresss.project">
+              <a [routerLink]="['/project', formProgresss.project?.id, 'view']">{{ formProgresss.project?.projectName }}</a>
             </div>
           </td>
           <td class="text-right">

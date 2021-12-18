@@ -43,6 +43,17 @@
     "clientPackageManager": "npm",
     "languages": ["en"],
     "enableGradleEnterprise": false,
-    "entities": ["Company", "Form", "Question", "QuestionChoice", "FormProgresss", "Answer", "MultipleChoiceAnsewer", "TypeOfOrganization"]
+    "entities": [
+      "Company",
+      "Form",
+      "Question",
+      "QuestionChoice",
+      "FormProgresss",
+      "Answer",
+      "MultipleChoiceAnsewer",
+      "TypeOfOrganization",
+      "Project"
+    ],
+    "lastLiquibaseTimestamp": 1639842716000
   }
 }

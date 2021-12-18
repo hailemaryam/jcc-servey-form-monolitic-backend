@@ -7,10 +7,11 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link FormProgresss} and its DTO {@link FormProgresssDTO}.
  */
-@Mapper(componentModel = "spring", uses = { UserMapper.class, FormMapper.class })
+@Mapper(componentModel = "spring", uses = { UserMapper.class, FormMapper.class, ProjectMapper.class })
 public interface FormProgresssMapper extends EntityMapper<FormProgresssDTO, FormProgresss> {
     @Mapping(target = "user", source = "user", qualifiedByName = "login")
     @Mapping(target = "form", source = "form", qualifiedByName = "name")
+    @Mapping(target = "project", source = "project", qualifiedByName = "projectName")
     FormProgresssDTO toDto(FormProgresss s);
 
     @Named("id")

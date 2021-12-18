@@ -14,6 +14,8 @@ import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 import { IForm } from 'app/entities/form/form.model';
 import { FormService } from 'app/entities/form/service/form.service';
+import { IProject } from 'app/entities/project/project.model';
+import { ProjectService } from 'app/entities/project/service/project.service';
 
 @Component({
   selector: 'jhi-form-progresss-update',
@@ -24,6 +26,7 @@ export class FormProgresssUpdateComponent implements OnInit {
 
   usersSharedCollection: IUser[] = [];
   formsSharedCollection: IForm[] = [];
+  projectsSharedCollection: IProject[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -33,12 +36,14 @@ export class FormProgresssUpdateComponent implements OnInit {
     sentedOn: [],
     user: [],
     form: [],
+    project: [],
   });
 
   constructor(
     protected formProgresssService: FormProgresssService,
     protected userService: UserService,
     protected formService: FormService,
+    protected projectService: ProjectService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -80,6 +85,10 @@ export class FormProgresssUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackProjectById(index: number, item: IProject): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFormProgresss>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -108,10 +117,15 @@ export class FormProgresssUpdateComponent implements OnInit {
       sentedOn: formProgresss.sentedOn ? formProgresss.sentedOn.format(DATE_TIME_FORMAT) : null,
       user: formProgresss.user,
       form: formProgresss.form,
+      project: formProgresss.project,
     });
 
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, formProgresss.user);
     this.formsSharedCollection = this.formService.addFormToCollectionIfMissing(this.formsSharedCollection, formProgresss.form);
+    this.projectsSharedCollection = this.projectService.addProjectToCollectionIfMissing(
+      this.projectsSharedCollection,
+      formProgresss.project
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -126,6 +140,14 @@ export class FormProgresssUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IForm[]>) => res.body ?? []))
       .pipe(map((forms: IForm[]) => this.formService.addFormToCollectionIfMissing(forms, this.editForm.get('form')!.value)))
       .subscribe((forms: IForm[]) => (this.formsSharedCollection = forms));
+
+    this.projectService
+      .query()
+      .pipe(map((res: HttpResponse<IProject[]>) => res.body ?? []))
+      .pipe(
+        map((projects: IProject[]) => this.projectService.addProjectToCollectionIfMissing(projects, this.editForm.get('project')!.value))
+      )
+      .subscribe((projects: IProject[]) => (this.projectsSharedCollection = projects));
   }
 
   protected createFromForm(): IFormProgresss {
@@ -138,6 +160,7 @@ export class FormProgresssUpdateComponent implements OnInit {
       sentedOn: this.editForm.get(['sentedOn'])!.value ? dayjs(this.editForm.get(['sentedOn'])!.value, DATE_TIME_FORMAT) : undefined,
       user: this.editForm.get(['user'])!.value,
       form: this.editForm.get(['form'])!.value,
+      project: this.editForm.get(['project'])!.value,
     };
   }
 }

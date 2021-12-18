@@ -23,6 +23,8 @@ public class FormProgresssDTO implements Serializable {
 
     private FormDTO form;
 
+    private ProjectDTO project;
+
     public Long getId() {
         return id;
     }
@@ -79,6 +81,14 @@ public class FormProgresssDTO implements Serializable {
         this.form = form;
     }
 
+    public ProjectDTO getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectDTO project) {
+        this.project = project;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,6 +121,7 @@ public class FormProgresssDTO implements Serializable {
             ", sentedOn='" + getSentedOn() + "'" +
             ", user=" + getUser() +
             ", form=" + getForm() +
+            ", project=" + getProject() +
             "}";
     }
 }

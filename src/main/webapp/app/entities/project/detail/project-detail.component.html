@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="project">
+      <h2 data-cy="projectDetailsHeading"><span jhiTranslate="rmtMonoliticApp.project.detail.title">Project</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ project.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.project.projectName">Project Name</span></dt>
+        <dd>
+          <span>{{ project.projectName }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.project.projectDescription">Project Description</span></dt>
+        <dd>
+          <span>{{ project.projectDescription }}</span>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.project.company">Company</span></dt>
+        <dd>
+          <div *ngIf="project.company">
+            <a [routerLink]="['/company', project.company?.id, 'view']">{{ project.company?.companyName }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/project', project.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

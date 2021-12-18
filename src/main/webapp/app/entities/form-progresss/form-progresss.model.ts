@@ -2,6 +2,7 @@ import * as dayjs from 'dayjs';
 import { IAnswer } from 'app/entities/answer/answer.model';
 import { IUser } from 'app/entities/user/user.model';
 import { IForm } from 'app/entities/form/form.model';
+import { IProject } from 'app/entities/project/project.model';
 
 export interface IFormProgresss {
   id?: number;
@@ -12,6 +13,7 @@ export interface IFormProgresss {
   answers?: IAnswer[] | null;
   user?: IUser | null;
   form?: IForm | null;
+  project?: IProject | null;
 }
 
 export class FormProgresss implements IFormProgresss {
@@ -23,7 +25,8 @@ export class FormProgresss implements IFormProgresss {
     public sentedOn?: dayjs.Dayjs | null,
     public answers?: IAnswer[] | null,
     public user?: IUser | null,
-    public form?: IForm | null
+    public form?: IForm | null,
+    public project?: IProject | null
   ) {
     this.submited = this.submited ?? false;
   }

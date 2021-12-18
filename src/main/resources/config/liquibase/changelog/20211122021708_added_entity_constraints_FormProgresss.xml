@@ -19,5 +19,11 @@
                                  constraintName="fk_form_progresss__form_id"
                                  referencedColumnNames="id"
                                  referencedTableName="form"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_id"
+                                 baseTableName="form_progresss"
+                                 constraintName="fk_form_progresss__project_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="project"/>
     </changeSet>
 </databaseChangeLog>

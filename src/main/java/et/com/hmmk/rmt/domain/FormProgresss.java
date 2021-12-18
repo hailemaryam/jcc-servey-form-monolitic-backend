@@ -49,6 +49,10 @@ public class FormProgresss implements Serializable {
     @JsonIgnoreProperties(value = { "formProgressses", "questions", "user" }, allowSetters = true)
     private Form form;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "formProgresses", "company" }, allowSetters = true)
+    private Project project;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -170,6 +174,19 @@ public class FormProgresss implements Serializable {
 
     public FormProgresss form(Form form) {
         this.setForm(form);
+        return this;
+    }
+
+    public Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public FormProgresss project(Project project) {
+        this.setProject(project);
         return this;
     }
 

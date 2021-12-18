@@ -14,6 +14,8 @@ import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 import { IForm } from 'app/entities/form/form.model';
 import { FormService } from 'app/entities/form/service/form.service';
+import { IProject } from 'app/entities/project/project.model';
+import { ProjectService } from 'app/entities/project/service/project.service';
 
 import { FormProgresssUpdateComponent } from './form-progresss-update.component';
 
@@ -24,6 +26,7 @@ describe('FormProgresss Management Update Component', () => {
   let formProgresssService: FormProgresssService;
   let userService: UserService;
   let formService: FormService;
+  let projectService: ProjectService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,6 +42,7 @@ describe('FormProgresss Management Update Component', () => {
     formProgresssService = TestBed.inject(FormProgresssService);
     userService = TestBed.inject(UserService);
     formService = TestBed.inject(FormService);
+    projectService = TestBed.inject(ProjectService);
 
     comp = fixture.componentInstance;
   });
@@ -82,12 +86,33 @@ describe('FormProgresss Management Update Component', () => {
       expect(comp.formsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Project query and add missing value', () => {
+      const formProgresss: IFormProgresss = { id: 456 };
+      const project: IProject = { id: 75776 };
+      formProgresss.project = project;
+
+      const projectCollection: IProject[] = [{ id: 92003 }];
+      jest.spyOn(projectService, 'query').mockReturnValue(of(new HttpResponse({ body: projectCollection })));
+      const additionalProjects = [project];
+      const expectedCollection: IProject[] = [...additionalProjects, ...projectCollection];
+      jest.spyOn(projectService, 'addProjectToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ formProgresss });
+      comp.ngOnInit();
+
+      expect(projectService.query).toHaveBeenCalled();
+      expect(projectService.addProjectToCollectionIfMissing).toHaveBeenCalledWith(projectCollection, ...additionalProjects);
+      expect(comp.projectsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const formProgresss: IFormProgresss = { id: 456 };
       const user: IUser = { id: 57334 };
       formProgresss.user = user;
       const form: IForm = { id: 68357 };
       formProgresss.form = form;
+      const project: IProject = { id: 54902 };
+      formProgresss.project = project;
 
       activatedRoute.data = of({ formProgresss });
       comp.ngOnInit();
@@ -95,6 +120,7 @@ describe('FormProgresss Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(formProgresss));
       expect(comp.usersSharedCollection).toContain(user);
       expect(comp.formsSharedCollection).toContain(form);
+      expect(comp.projectsSharedCollection).toContain(project);
     });
   });
 
@@ -175,6 +201,14 @@ describe('FormProgresss Management Update Component', () => {
       it('Should return tracked Form primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackFormById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackProjectById', () => {
+      it('Should return tracked Project primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackProjectById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

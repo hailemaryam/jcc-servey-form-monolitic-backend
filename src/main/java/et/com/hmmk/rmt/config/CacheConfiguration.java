@@ -63,6 +63,9 @@ public class CacheConfiguration {
             createCache(cm, et.com.hmmk.rmt.domain.TypeOfOrganization.class.getName());
             createCache(cm, et.com.hmmk.rmt.domain.TypeOfOrganization.class.getName() + ".companies");
             createCache(cm, et.com.hmmk.rmt.domain.Company.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.Company.class.getName() + ".projects");
+            createCache(cm, et.com.hmmk.rmt.domain.Project.class.getName());
+            createCache(cm, et.com.hmmk.rmt.domain.Project.class.getName() + ".formProgresses");
             // jhipster-needle-ehcache-add-entry
         };
     }

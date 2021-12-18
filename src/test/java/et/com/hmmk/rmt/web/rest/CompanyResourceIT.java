@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import et.com.hmmk.rmt.IntegrationTest;
 import et.com.hmmk.rmt.domain.Company;
+import et.com.hmmk.rmt.domain.Project;
 import et.com.hmmk.rmt.domain.TypeOfOrganization;
 import et.com.hmmk.rmt.domain.User;
 import et.com.hmmk.rmt.repository.CompanyRepository;
@@ -574,6 +575,32 @@ class CompanyResourceIT {
 
         // Get all the companyList where user equals to (userId + 1)
         defaultCompanyShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllCompaniesByProjectIsEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        em.persist(project);
+        em.flush();
+        company.addProject(project);
+        companyRepository.saveAndFlush(company);
+        Long projectId = project.getId();
+
+        // Get all the companyList where project equals to projectId
+        defaultCompanyShouldBeFound("projectId.equals=" + projectId);
+
+        // Get all the companyList where project equals to (projectId + 1)
+        defaultCompanyShouldNotBeFound("projectId.equals=" + (projectId + 1));
     }
 
     @Test

@@ -120,6 +120,15 @@ public class FormProgresssQueryService extends QueryService<FormProgresss> {
                         buildSpecification(criteria.getFormId(), root -> root.join(FormProgresss_.form, JoinType.LEFT).get(Form_.id))
                     );
             }
+            if (criteria.getProjectId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getProjectId(),
+                            root -> root.join(FormProgresss_.project, JoinType.LEFT).get(Project_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

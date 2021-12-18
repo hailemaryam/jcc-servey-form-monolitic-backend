@@ -1,4 +1,5 @@
 import { IUser } from 'app/entities/user/user.model';
+import { IProject } from 'app/entities/project/project.model';
 import { ITypeOfOrganization } from 'app/entities/type-of-organization/type-of-organization.model';
 
 export interface ICompany {
@@ -8,6 +9,7 @@ export interface ICompany {
   futureFocusArea?: string | null;
   currentFundingCycle?: string | null;
   user?: IUser | null;
+  projects?: IProject[] | null;
   typeOfOrganation?: ITypeOfOrganization | null;
 }
 
@@ -19,6 +21,7 @@ export class Company implements ICompany {
     public futureFocusArea?: string | null,
     public currentFundingCycle?: string | null,
     public user?: IUser | null,
+    public projects?: IProject[] | null,
     public typeOfOrganation?: ITypeOfOrganization | null
   ) {}
 }

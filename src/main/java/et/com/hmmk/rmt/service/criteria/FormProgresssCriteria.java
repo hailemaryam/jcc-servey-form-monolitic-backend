@@ -41,6 +41,8 @@ public class FormProgresssCriteria implements Serializable, Criteria {
 
     private LongFilter formId;
 
+    private LongFilter projectId;
+
     private Boolean distinct;
 
     public FormProgresssCriteria() {}
@@ -54,6 +56,7 @@ public class FormProgresssCriteria implements Serializable, Criteria {
         this.answerId = other.answerId == null ? null : other.answerId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.formId = other.formId == null ? null : other.formId.copy();
+        this.projectId = other.projectId == null ? null : other.projectId.copy();
         this.distinct = other.distinct;
     }
 
@@ -182,6 +185,21 @@ public class FormProgresssCriteria implements Serializable, Criteria {
         this.formId = formId;
     }
 
+    public LongFilter getProjectId() {
+        return projectId;
+    }
+
+    public LongFilter projectId() {
+        if (projectId == null) {
+            projectId = new LongFilter();
+        }
+        return projectId;
+    }
+
+    public void setProjectId(LongFilter projectId) {
+        this.projectId = projectId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -208,13 +226,14 @@ public class FormProgresssCriteria implements Serializable, Criteria {
             Objects.equals(answerId, that.answerId) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(formId, that.formId) &&
+            Objects.equals(projectId, that.projectId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, submited, startedOn, submitedOn, sentedOn, answerId, userId, formId, distinct);
+        return Objects.hash(id, submited, startedOn, submitedOn, sentedOn, answerId, userId, formId, projectId, distinct);
     }
 
     // prettier-ignore
@@ -229,6 +248,7 @@ public class FormProgresssCriteria implements Serializable, Criteria {
             (answerId != null ? "answerId=" + answerId + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
             (formId != null ? "formId=" + formId + ", " : "") +
+            (projectId != null ? "projectId=" + projectId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

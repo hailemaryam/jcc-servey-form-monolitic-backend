@@ -40,6 +40,12 @@
             <a [routerLink]="['/form', formProgresss.form?.id, 'view']">{{ formProgresss.form?.name }}</a>
           </div>
         </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.formProgresss.project">Project</span></dt>
+        <dd>
+          <div *ngIf="formProgresss.project">
+            <a [routerLink]="['/project', formProgresss.project?.id, 'view']">{{ formProgresss.project?.projectName }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

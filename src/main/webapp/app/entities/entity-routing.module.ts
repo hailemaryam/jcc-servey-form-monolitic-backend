@@ -44,6 +44,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'rmtMonoliticApp.company.home.title' },
         loadChildren: () => import('./company/company.module').then(m => m.CompanyModule),
       },
+      {
+        path: 'project',
+        data: { pageTitle: 'rmtMonoliticApp.project.home.title' },
+        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

@@ -2,6 +2,8 @@ package et.com.hmmk.rmt.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -36,6 +38,11 @@ public class Company implements Serializable {
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+
+    @OneToMany(mappedBy = "company")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "formProgresses", "company" }, allowSetters = true)
+    private Set<Project> projects = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "companies" }, allowSetters = true)
@@ -118,6 +125,37 @@ public class Company implements Serializable {
 
     public Company user(User user) {
         this.setUser(user);
+        return this;
+    }
+
+    public Set<Project> getProjects() {
+        return this.projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        if (this.projects != null) {
+            this.projects.forEach(i -> i.setCompany(null));
+        }
+        if (projects != null) {
+            projects.forEach(i -> i.setCompany(this));
+        }
+        this.projects = projects;
+    }
+
+    public Company projects(Set<Project> projects) {
+        this.setProjects(projects);
+        return this;
+    }
+
+    public Company addProject(Project project) {
+        this.projects.add(project);
+        project.setCompany(this);
+        return this;
+    }
+
+    public Company removeProject(Project project) {
+        this.projects.remove(project);
+        project.setCompany(null);
         return this;
     }
 

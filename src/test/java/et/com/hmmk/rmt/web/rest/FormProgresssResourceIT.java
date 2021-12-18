@@ -9,6 +9,7 @@ import et.com.hmmk.rmt.IntegrationTest;
 import et.com.hmmk.rmt.domain.Answer;
 import et.com.hmmk.rmt.domain.Form;
 import et.com.hmmk.rmt.domain.FormProgresss;
+import et.com.hmmk.rmt.domain.Project;
 import et.com.hmmk.rmt.domain.User;
 import et.com.hmmk.rmt.repository.FormProgresssRepository;
 import et.com.hmmk.rmt.service.criteria.FormProgresssCriteria;
@@ -485,6 +486,32 @@ class FormProgresssResourceIT {
 
         // Get all the formProgresssList where form equals to (formId + 1)
         defaultFormProgresssShouldNotBeFound("formId.equals=" + (formId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllFormProgresssesByProjectIsEqualToSomething() throws Exception {
+        // Initialize the database
+        formProgresssRepository.saveAndFlush(formProgresss);
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        em.persist(project);
+        em.flush();
+        formProgresss.setProject(project);
+        formProgresssRepository.saveAndFlush(formProgresss);
+        Long projectId = project.getId();
+
+        // Get all the formProgresssList where project equals to projectId
+        defaultFormProgresssShouldBeFound("projectId.equals=" + projectId);
+
+        // Get all the formProgresssList where project equals to (projectId + 1)
+        defaultFormProgresssShouldNotBeFound("projectId.equals=" + (projectId + 1));
     }
 
     /**

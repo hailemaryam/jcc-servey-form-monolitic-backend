@@ -106,7 +106,7 @@ public class ExportResource {
                 } else if (i % 6 == 3) {
                     exportByFormListResponseDTO.setDispersedIn(answersByFormProgress.getNumber());
                 } else if (i % 6 == 4) {
-                    exportByFormListResponseDTO.setSectoralScope(answersByFormProgress.getDropDown());
+                    exportByFormListResponseDTO.setSectoralScope(answersByFormProgress.getShortAnswer());
                 } else if (i % 6 == 5) {
                     exportByFormListResponseDTO.setNumberOfBeneficiary(answersByFormProgress.getNumber());
                 } else if (i % 6 == 0) {

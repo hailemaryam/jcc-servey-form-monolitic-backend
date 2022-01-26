@@ -97,11 +97,12 @@ public class FormShareResource {
     }
 
     @PutMapping("/form-share/{id}")
-    public ResponseEntity<Void> createFormProgresForTypeOfOrganization(
+    public ResponseEntity<List<FormProgresssDTO>> createFormProgresForTypeOfOrganization(
         @PathVariable(value = "id") final Long id,
         @RequestBody TypeOfOrganizationDTO typeOfOrganizationDTO
     ) throws URISyntaxException {
         log.debug("REST request to create form progres by TypeOfOrganization : {}, {}", id, typeOfOrganizationDTO);
+        List<FormProgresssDTO> result = new ArrayList<>();
         CompanyCriteria companyCriteria = new CompanyCriteria();
         LongFilter organizationTypeFilter = new LongFilter();
         organizationTypeFilter.setEquals(typeOfOrganizationDTO.getId());
@@ -127,21 +128,14 @@ public class FormShareResource {
                         formDTO.setId(id);
                         formProgresssDTO.setForm(formDTO);
                         formProgresssDTO.setProject(projectDTO);
-                        formProgresssService.save(formProgresssDTO);
+                        result.add(formProgresssService.save(formProgresssDTO));
                     });
             }
         });
         return ResponseEntity
-            .noContent()
-            .headers(
-                HeaderUtil.createEntityCreationAlert(
-                    applicationName,
-                    true,
-                    ENTITY_NAME,
-                    companyDTOList.size() + " company has shared the form"
-                )
-            )
-            .build();
+            .created(new URI("/api/form-progressses/" + id))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "form progresses shared for company type"))
+            .body(result);
     }
 
     private List<ProjectDTO> getUsersProjectByCompanyId(Long userId) {

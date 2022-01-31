@@ -49,7 +49,7 @@ spring:
     port: 587
     username: molsrmtool@gmail.com
     #    password: yegara@1234@gmail
-    password: rmt@123456
+    password: 3xU7byrbh9Vf
     protocol: smtp
     tls: true
     properties.mail.smtp:

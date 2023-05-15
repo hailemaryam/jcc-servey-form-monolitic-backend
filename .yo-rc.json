@@ -52,8 +52,9 @@
       "Answer",
       "MultipleChoiceAnsewer",
       "TypeOfOrganization",
-      "Project"
+      "Project",
+      "News"
     ],
-    "lastLiquibaseTimestamp": 1639842716000
+    "lastLiquibaseTimestamp": 1683962422000
   }
 }

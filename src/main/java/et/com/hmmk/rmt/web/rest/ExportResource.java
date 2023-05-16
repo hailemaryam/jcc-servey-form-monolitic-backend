@@ -5,17 +5,12 @@ import et.com.hmmk.rmt.service.criteria.AnswerCriteria;
 import et.com.hmmk.rmt.service.criteria.FormProgresssCriteria;
 import et.com.hmmk.rmt.service.criteria.MultipleChoiceAnsewerCriteria;
 import et.com.hmmk.rmt.service.dto.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.service.filter.LongFilter;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link et.com.hmmk.rmt.domain.Form}.
@@ -24,14 +19,8 @@ import tech.jhipster.web.util.HeaderUtil;
 @RequestMapping("/api")
 public class ExportResource {
 
-    private final Logger log = LoggerFactory.getLogger(ExportResource.class);
-
-    private static final String ENTITY_NAME = "form";
-
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
-    private final FormQueryService formQueryService;
 
     private final AnswerQueryService answerQueryService;
 
@@ -44,14 +33,12 @@ public class ExportResource {
     private final ProjectService projectService;
 
     public ExportResource(
-        FormQueryService formQueryService,
         AnswerQueryService answerQueryService,
         MultipleChoiceAnsewerQueryService multipleChoiceAnsewerQueryService,
         FormProgresssQueryService formProgresssQueryService,
         CompanyService companyService,
         ProjectService projectService
     ) {
-        this.formQueryService = formQueryService;
         this.answerQueryService = answerQueryService;
         this.multipleChoiceAnsewerQueryService = multipleChoiceAnsewerQueryService;
         this.formProgresssQueryService = formProgresssQueryService;
@@ -85,7 +72,7 @@ public class ExportResource {
                 });
             int i = 1;
             for (AnswerDTO answersByFormProgress : getAnswersByFormProgress(formProgresssDTO.getId())) {
-                if (i % 6 == 1) {
+                if (i % 9 == 1) {
                     MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
                     LongFilter answerId = new LongFilter();
                     answerId.setEquals(answersByFormProgress.getId());
@@ -101,15 +88,21 @@ public class ExportResource {
                         }
                     }
                     exportByFormListResponseDTO.setObjectiveOfTheProject(objectiveOfProject);
-                } else if (i % 6 == 2) {
+                } else if (i % 9 == 2) {
                     exportByFormListResponseDTO.setTotalCommittedFund(answersByFormProgress.getNumber());
-                } else if (i % 6 == 3) {
+                } else if (i % 9 == 3) {
                     exportByFormListResponseDTO.setDispersedIn(answersByFormProgress.getNumber());
-                } else if (i % 6 == 4) {
+                } else if (i % 9 == 4) {
                     exportByFormListResponseDTO.setSectoralScope(answersByFormProgress.getShortAnswer());
-                } else if (i % 6 == 5) {
-                    exportByFormListResponseDTO.setNumberOfBeneficiary(answersByFormProgress.getNumber());
-                } else if (i % 6 == 0) {
+                } else if (i % 9 == 5) {
+                    exportByFormListResponseDTO.setNumberOfMaleBeneficiary(answersByFormProgress.getNumber());
+                } else if (i % 9 == 6) {
+                    exportByFormListResponseDTO.setNumberOfFemaleBeneficiary(answersByFormProgress.getNumber());
+                } else if (i % 9 == 7) {
+                    exportByFormListResponseDTO.setProjectStartDate(answersByFormProgress.getDate());
+                } else if (i % 9 == 8) {
+                    exportByFormListResponseDTO.setProjectEndDate(answersByFormProgress.getDate());
+                } else if (i % 9 == 0) {
                     MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
                     LongFilter answerId = new LongFilter();
                     answerId.setEquals(answersByFormProgress.getId());

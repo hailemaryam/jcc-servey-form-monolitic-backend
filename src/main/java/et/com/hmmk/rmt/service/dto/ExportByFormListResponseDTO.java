@@ -1,6 +1,7 @@
 package et.com.hmmk.rmt.service.dto;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 public class ExportByFormListResponseDTO implements Serializable {
 
@@ -15,8 +16,13 @@ public class ExportByFormListResponseDTO implements Serializable {
     private Double totalCommittedFund;
     private Double dispersedIn;
     private String sectoralScope;
-    private Double numberOfBeneficiary;
+    private Double numberOfMaleBeneficiary;
+    private Double numberOfFemaleBeneficiary;
+    private Instant projectStartDate;
+    private Instant projectEndDate;
     private String geographicalFocus;
+
+    public ExportByFormListResponseDTO() {}
 
     public Long getFormProgressId() {
         return formProgressId;
@@ -90,12 +96,36 @@ public class ExportByFormListResponseDTO implements Serializable {
         this.sectoralScope = sectoralScope;
     }
 
-    public Double getNumberOfBeneficiary() {
-        return numberOfBeneficiary;
+    public Double getNumberOfMaleBeneficiary() {
+        return numberOfMaleBeneficiary;
     }
 
-    public void setNumberOfBeneficiary(Double numberOfBeneficiary) {
-        this.numberOfBeneficiary = numberOfBeneficiary;
+    public void setNumberOfMaleBeneficiary(Double numberOfMaleBeneficiary) {
+        this.numberOfMaleBeneficiary = numberOfMaleBeneficiary;
+    }
+
+    public Double getNumberOfFemaleBeneficiary() {
+        return numberOfFemaleBeneficiary;
+    }
+
+    public void setNumberOfFemaleBeneficiary(Double numberOfFemaleBeneficiary) {
+        this.numberOfFemaleBeneficiary = numberOfFemaleBeneficiary;
+    }
+
+    public Instant getProjectStartDate() {
+        return projectStartDate;
+    }
+
+    public void setProjectStartDate(Instant projectStartDate) {
+        this.projectStartDate = projectStartDate;
+    }
+
+    public Instant getProjectEndDate() {
+        return projectEndDate;
+    }
+
+    public void setProjectEndDate(Instant projectEndDate) {
+        this.projectEndDate = projectEndDate;
     }
 
     public String getGeographicalFocus() {

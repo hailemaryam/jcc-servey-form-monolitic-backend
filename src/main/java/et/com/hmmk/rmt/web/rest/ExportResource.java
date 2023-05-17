@@ -1,5 +1,7 @@
 package et.com.hmmk.rmt.web.rest;
 
+import static java.util.stream.Collectors.groupingBy;
+
 import et.com.hmmk.rmt.service.*;
 import et.com.hmmk.rmt.service.criteria.AnswerCriteria;
 import et.com.hmmk.rmt.service.criteria.FormProgresssCriteria;
@@ -8,7 +10,10 @@ import et.com.hmmk.rmt.service.dto.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.service.filter.LongFilter;
 
@@ -28,6 +33,8 @@ public class ExportResource {
 
     private final FormProgresssQueryService formProgresssQueryService;
 
+    private final FormProgresssService formProgresssService;
+
     private final CompanyService companyService;
 
     private final ProjectService projectService;
@@ -36,12 +43,14 @@ public class ExportResource {
         AnswerQueryService answerQueryService,
         MultipleChoiceAnsewerQueryService multipleChoiceAnsewerQueryService,
         FormProgresssQueryService formProgresssQueryService,
+        FormProgresssService formProgresssService,
         CompanyService companyService,
         ProjectService projectService
     ) {
         this.answerQueryService = answerQueryService;
         this.multipleChoiceAnsewerQueryService = multipleChoiceAnsewerQueryService;
         this.formProgresssQueryService = formProgresssQueryService;
+        this.formProgresssService = formProgresssService;
         this.companyService = companyService;
         this.projectService = projectService;
     }
@@ -50,6 +59,12 @@ public class ExportResource {
     public List<ExportByFormListResponseDTO> exportByFormId(@RequestBody ExportByFormListRequestDTO exportByFormListRequestDTO)
         throws URISyntaxException {
         List<ExportByFormListResponseDTO> exportByFormListResponseDTOList = prepareData(exportByFormListRequestDTO);
+        return exportByFormListResponseDTOList;
+    }
+
+    @GetMapping("/groupedBySectorValue")
+    public List<ExportByFormListResponseDTO> groupedBySectorValue() throws URISyntaxException {
+        List<ExportByFormListResponseDTO> exportByFormListResponseDTOList = prepareGraphData();
         return exportByFormListResponseDTOList;
     }
 
@@ -70,60 +85,120 @@ public class ExportResource {
                     exportByFormListResponseDTO.setProjectDescription(projectDTO.getProjectDescription());
                     exportByFormListResponseDTO.setProjectName(projectDTO.getProjectName());
                 });
-            int i = 1;
-            for (AnswerDTO answersByFormProgress : getAnswersByFormProgress(formProgresssDTO.getId())) {
-                if (i % 9 == 1) {
-                    MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
-                    LongFilter answerId = new LongFilter();
-                    answerId.setEquals(answersByFormProgress.getId());
-                    multipleChoiceAnsewerCriteria.setAnswerId(answerId);
-                    String objectiveOfProject = "";
-                    for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : multipleChoiceAnsewerQueryService.findByCriteria(
-                        multipleChoiceAnsewerCriteria
-                    )) {
-                        if (objectiveOfProject.equals("")) {
-                            objectiveOfProject = multipleChoiceAnsewerDTO.getChoice();
-                        } else {
-                            objectiveOfProject = objectiveOfProject + "| " + multipleChoiceAnsewerDTO.getChoice();
-                        }
-                    }
-                    exportByFormListResponseDTO.setObjectiveOfTheProject(objectiveOfProject);
-                } else if (i % 9 == 2) {
-                    exportByFormListResponseDTO.setTotalCommittedFund(answersByFormProgress.getNumber());
-                } else if (i % 9 == 3) {
-                    exportByFormListResponseDTO.setDispersedIn(answersByFormProgress.getNumber());
-                } else if (i % 9 == 4) {
-                    exportByFormListResponseDTO.setSectoralScope(answersByFormProgress.getShortAnswer());
-                } else if (i % 9 == 5) {
-                    exportByFormListResponseDTO.setNumberOfMaleBeneficiary(answersByFormProgress.getNumber());
-                } else if (i % 9 == 6) {
-                    exportByFormListResponseDTO.setNumberOfFemaleBeneficiary(answersByFormProgress.getNumber());
-                } else if (i % 9 == 7) {
-                    exportByFormListResponseDTO.setProjectStartDate(answersByFormProgress.getDate());
-                } else if (i % 9 == 8) {
-                    exportByFormListResponseDTO.setProjectEndDate(answersByFormProgress.getDate());
-                } else if (i % 9 == 0) {
-                    MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
-                    LongFilter answerId = new LongFilter();
-                    answerId.setEquals(answersByFormProgress.getId());
-                    multipleChoiceAnsewerCriteria.setAnswerId(answerId);
-                    String geographicalFocusArea = "";
-                    for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : multipleChoiceAnsewerQueryService.findByCriteria(
-                        multipleChoiceAnsewerCriteria
-                    )) {
-                        if (geographicalFocusArea.equals("")) {
-                            geographicalFocusArea = multipleChoiceAnsewerDTO.getChoice();
-                        } else {
-                            geographicalFocusArea = geographicalFocusArea + "| " + multipleChoiceAnsewerDTO.getChoice();
-                        }
-                    }
-                    exportByFormListResponseDTO.setGeographicalFocus(geographicalFocusArea);
-                }
-                i++;
-            }
+            extractAndSetAnswer(formProgresssDTO, exportByFormListResponseDTO);
             responseDTOList.add(exportByFormListResponseDTO);
         }
         return responseDTOList;
+    }
+
+    private List<ExportByFormListResponseDTO> prepareGraphData() {
+        List<ExportByFormListResponseDTO> responseDTOList = new ArrayList<>();
+        for (FormProgresssDTO formProgresssDTO : formProgresssService.findAll(Pageable.unpaged())) {
+            ExportByFormListResponseDTO exportByFormListResponseDTO = new ExportByFormListResponseDTO();
+            extractAndSetAnswer(formProgresssDTO, exportByFormListResponseDTO);
+            responseDTOList.add(exportByFormListResponseDTO);
+        }
+        return responseDTOList
+            .stream()
+            .collect(Collectors.groupingBy(ExportByFormListResponseDTO::getSectoralScope))
+            .entrySet()
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    x -> {
+                        Double commitedFundSum = x
+                            .getValue()
+                            .stream()
+                            .mapToDouble(ExportByFormListResponseDTO::getTotalCommittedFund)
+                            .sum();
+                        Double dispersedSum = x.getValue().stream().mapToDouble(ExportByFormListResponseDTO::getDispersedIn).sum();
+                        Double maleBeneficiarySum = x
+                            .getValue()
+                            .stream()
+                            .mapToDouble(ExportByFormListResponseDTO::getNumberOfMaleBeneficiary)
+                            .sum();
+                        Double femaleBeneficiarySum = x
+                            .getValue()
+                            .stream()
+                            .mapToDouble(ExportByFormListResponseDTO::getNumberOfFemaleBeneficiary)
+                            .sum();
+                        return new ExportByFormListResponseDTO(
+                            x.getKey(),
+                            commitedFundSum,
+                            dispersedSum,
+                            maleBeneficiarySum,
+                            femaleBeneficiarySum
+                        );
+                    },
+                    Map.Entry::getValue
+                )
+            )
+            .entrySet()
+            .stream()
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+    }
+
+    private void extractAndSetAnswer(FormProgresssDTO formProgresssDTO, ExportByFormListResponseDTO exportByFormListResponseDTO) {
+        int i = 1;
+        for (AnswerDTO answersByFormProgress : getAnswersByFormProgress(formProgresssDTO.getId())) {
+            if (i % 9 == 1) {
+                objectiveOfTheProjectSetter(exportByFormListResponseDTO, answersByFormProgress);
+            } else if (i % 9 == 2) {
+                exportByFormListResponseDTO.setTotalCommittedFund(answersByFormProgress.getNumber());
+            } else if (i % 9 == 3) {
+                exportByFormListResponseDTO.setDispersedIn(answersByFormProgress.getNumber());
+            } else if (i % 9 == 4) {
+                exportByFormListResponseDTO.setSectoralScope(answersByFormProgress.getShortAnswer());
+            } else if (i % 9 == 5) {
+                exportByFormListResponseDTO.setNumberOfMaleBeneficiary(answersByFormProgress.getNumber());
+            } else if (i % 9 == 6) {
+                exportByFormListResponseDTO.setNumberOfFemaleBeneficiary(answersByFormProgress.getNumber());
+            } else if (i % 9 == 7) {
+                exportByFormListResponseDTO.setProjectStartDate(answersByFormProgress.getDate());
+            } else if (i % 9 == 8) {
+                exportByFormListResponseDTO.setProjectEndDate(answersByFormProgress.getDate());
+            } else if (i % 9 == 0) {
+                geographicalFocusAriaSetter(exportByFormListResponseDTO, answersByFormProgress);
+            }
+            i++;
+        }
+    }
+
+    private void objectiveOfTheProjectSetter(ExportByFormListResponseDTO exportByFormListResponseDTO, AnswerDTO answersByFormProgress) {
+        MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
+        LongFilter answerId = new LongFilter();
+        answerId.setEquals(answersByFormProgress.getId());
+        multipleChoiceAnsewerCriteria.setAnswerId(answerId);
+        String objectiveOfProject = "";
+        for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : multipleChoiceAnsewerQueryService.findByCriteria(
+            multipleChoiceAnsewerCriteria
+        )) {
+            if (objectiveOfProject.equals("")) {
+                objectiveOfProject = multipleChoiceAnsewerDTO.getChoice();
+            } else {
+                objectiveOfProject = objectiveOfProject + "| " + multipleChoiceAnsewerDTO.getChoice();
+            }
+        }
+        exportByFormListResponseDTO.setObjectiveOfTheProject(objectiveOfProject);
+    }
+
+    private void geographicalFocusAriaSetter(ExportByFormListResponseDTO exportByFormListResponseDTO, AnswerDTO answersByFormProgress) {
+        MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
+        LongFilter answerId = new LongFilter();
+        answerId.setEquals(answersByFormProgress.getId());
+        multipleChoiceAnsewerCriteria.setAnswerId(answerId);
+        String geographicalFocusArea = "";
+        for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : multipleChoiceAnsewerQueryService.findByCriteria(
+            multipleChoiceAnsewerCriteria
+        )) {
+            if (geographicalFocusArea.equals("")) {
+                geographicalFocusArea = multipleChoiceAnsewerDTO.getChoice();
+            } else {
+                geographicalFocusArea = geographicalFocusArea + "| " + multipleChoiceAnsewerDTO.getChoice();
+            }
+        }
+        exportByFormListResponseDTO.setGeographicalFocus(geographicalFocusArea);
     }
 
     private List<AnswerDTO> getAnswersByFormProgress(Long formProgressId) {

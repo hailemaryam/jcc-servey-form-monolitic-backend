@@ -24,6 +24,20 @@ public class ExportByFormListResponseDTO implements Serializable {
 
     public ExportByFormListResponseDTO() {}
 
+    public ExportByFormListResponseDTO(
+        String sectoralScope,
+        Double totalCommittedFund,
+        Double dispersedIn,
+        Double numberOfMaleBeneficiary,
+        Double numberOfFemaleBeneficiary
+    ) {
+        this.totalCommittedFund = totalCommittedFund;
+        this.dispersedIn = dispersedIn;
+        this.sectoralScope = sectoralScope;
+        this.numberOfMaleBeneficiary = numberOfMaleBeneficiary;
+        this.numberOfFemaleBeneficiary = numberOfFemaleBeneficiary;
+    }
+
     public Long getFormProgressId() {
         return formProgressId;
     }

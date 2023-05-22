@@ -1,7 +1,5 @@
 package et.com.hmmk.rmt.web.rest;
 
-import static java.util.stream.Collectors.groupingBy;
-
 import et.com.hmmk.rmt.service.*;
 import et.com.hmmk.rmt.service.criteria.AnswerCriteria;
 import et.com.hmmk.rmt.service.criteria.FormProgresssCriteria;
@@ -11,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -62,9 +61,17 @@ public class ExportResource {
         return exportByFormListResponseDTOList;
     }
 
-    @GetMapping("/groupedBySectorValue")
-    public List<ExportByFormListResponseDTO> groupedBySectorValue() throws URISyntaxException {
-        List<ExportByFormListResponseDTO> exportByFormListResponseDTOList = prepareGraphData();
+    @PostMapping("/groupedBySectorValue")
+    public List<ExportByFormListResponseDTO> groupedBySectorValue(@RequestBody DateFilterRequestDTO dateFilterRequestDTO)
+        throws URISyntaxException {
+        List<ExportByFormListResponseDTO> exportByFormListResponseDTOList = prepareGroupBySector(dateFilterRequestDTO);
+        return exportByFormListResponseDTOList;
+    }
+
+    @PostMapping("/getRegionalSectorCount")
+    public List<SectorCountForRegion> getRegionalSectorCount(@RequestBody DateFilterRequestDTO dateFilterRequestDTO)
+        throws URISyntaxException {
+        List<SectorCountForRegion> exportByFormListResponseDTOList = prepareRegionalSectorCount(dateFilterRequestDTO);
         return exportByFormListResponseDTOList;
     }
 
@@ -91,7 +98,7 @@ public class ExportResource {
         return responseDTOList;
     }
 
-    private List<ExportByFormListResponseDTO> prepareGraphData() {
+    private List<ExportByFormListResponseDTO> prepareGroupBySector(DateFilterRequestDTO dateFilterRequestDTO) {
         List<ExportByFormListResponseDTO> responseDTOList = new ArrayList<>();
         for (FormProgresssDTO formProgresssDTO : formProgresssService.findAll(Pageable.unpaged())) {
             ExportByFormListResponseDTO exportByFormListResponseDTO = new ExportByFormListResponseDTO();
@@ -99,6 +106,16 @@ public class ExportResource {
             responseDTOList.add(exportByFormListResponseDTO);
         }
         return responseDTOList
+            .stream()
+            .filter(item ->
+                item.getProjectStartDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectEndDate()) ||
+                item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectEndDate().isAfter(dateFilterRequestDTO.getProjectEndDate()) ||
+                item.getProjectEndDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectEndDate().isBefore(dateFilterRequestDTO.getProjectEndDate())
+            )
+            .collect(Collectors.toList())
             .stream()
             .collect(Collectors.groupingBy(ExportByFormListResponseDTO::getSectoralScope))
             .entrySet()
@@ -137,6 +154,83 @@ public class ExportResource {
             .stream()
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
+    }
+
+    private List<SectorCountForRegion> prepareRegionalSectorCount(DateFilterRequestDTO dateFilterRequestDTO) {
+        List<SectorWithRegion> sectorWithRegionList = new ArrayList<>();
+        for (FormProgresssDTO formProgresssDTO : formProgresssService.findAll(Pageable.unpaged())) {
+            extractAndSetAnswerForRegionalSectorReport(formProgresssDTO, sectorWithRegionList);
+        }
+        List<SectorRegionJoin> sectorRegionJoinList = new ArrayList<>();
+        List<SectorWithRegion> filteredWithDate = sectorWithRegionList
+            .stream()
+            .filter(item ->
+                item.getProjectStartDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectEndDate()) ||
+                item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectEndDate().isAfter(dateFilterRequestDTO.getProjectEndDate()) ||
+                item.getProjectEndDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
+                item.getProjectEndDate().isBefore(dateFilterRequestDTO.getProjectEndDate())
+            )
+            .collect(Collectors.toList());
+        for (SectorWithRegion sectorWithRegion : filteredWithDate) {
+            for (String s : sectorWithRegion.getRegion()) {
+                sectorRegionJoinList.add(new SectorRegionJoin(sectorWithRegion.getSector(), s));
+            }
+        }
+        return sectorRegionJoinList
+            .stream()
+            .collect(Collectors.groupingBy(SectorRegionJoin::getRegion))
+            .entrySet()
+            .stream()
+            .map(x -> {
+                List<String> sectorList = x.getValue().stream().map(s -> s.getSector()).collect(Collectors.toList());
+                return new RegionWithSectorList(x.getKey(), sectorList);
+            })
+            .map(rs -> {
+                Map<String, Long> collect = rs
+                    .getSector()
+                    .stream()
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                return new SectorCountForRegion(collect, rs.getRegion());
+            })
+            .filter(item -> item.getRegion().equals(dateFilterRequestDTO.getRegion()))
+            .collect(Collectors.toList());
+    }
+
+    private void extractAndSetAnswerForRegionalSectorReport(
+        FormProgresssDTO formProgresssDTO,
+        List<SectorWithRegion> sectorWithRegionList
+    ) {
+        SectorWithRegion exportByFormListResponseDTO = new SectorWithRegion();
+        int i = 1;
+        for (AnswerDTO answersByFormProgress : getAnswersByFormProgress(formProgresssDTO.getId())) {
+            if (i % 9 == 4) {
+                exportByFormListResponseDTO.setSector(answersByFormProgress.getShortAnswer());
+            } else if (i % 9 == 7) {
+                exportByFormListResponseDTO.setProjectStartDate(answersByFormProgress.getDate());
+            } else if (i % 9 == 8) {
+                exportByFormListResponseDTO.setProjectEndDate(answersByFormProgress.getDate());
+            } else if (i % 9 == 0) {
+                exportByFormListResponseDTO.setRegion(geographicalFocusAriaSetterForList(answersByFormProgress));
+            }
+            i++;
+        }
+        sectorWithRegionList.add(exportByFormListResponseDTO);
+    }
+
+    private List<String> geographicalFocusAriaSetterForList(AnswerDTO answersByFormProgress) {
+        MultipleChoiceAnsewerCriteria multipleChoiceAnsewerCriteria = new MultipleChoiceAnsewerCriteria();
+        LongFilter answerId = new LongFilter();
+        answerId.setEquals(answersByFormProgress.getId());
+        multipleChoiceAnsewerCriteria.setAnswerId(answerId);
+        List<String> geographicalFocusArea = new ArrayList<>();
+        for (MultipleChoiceAnsewerDTO multipleChoiceAnsewerDTO : multipleChoiceAnsewerQueryService.findByCriteria(
+            multipleChoiceAnsewerCriteria
+        )) {
+            geographicalFocusArea.add(multipleChoiceAnsewerDTO.getChoice());
+        }
+        return geographicalFocusArea;
     }
 
     private void extractAndSetAnswer(FormProgresssDTO formProgresssDTO, ExportByFormListResponseDTO exportByFormListResponseDTO) {

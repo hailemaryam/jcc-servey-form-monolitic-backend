@@ -18,6 +18,8 @@
         "title": "News"
       },
       "id": "ID",
+      "featuredImage": "Featured Image",
+      "featuredImageUrl": "Featured Image Url",
       "title": "Title",
       "detail": "Detail",
       "createdBy": "Created By",

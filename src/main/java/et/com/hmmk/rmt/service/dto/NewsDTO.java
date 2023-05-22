@@ -12,6 +12,12 @@ public class NewsDTO implements Serializable {
 
     private Long id;
 
+    @Lob
+    private byte[] featuredImage;
+
+    private String featuredImageContentType;
+    private String featuredImageUrl;
+
     private String title;
 
     @Lob
@@ -29,6 +35,30 @@ public class NewsDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public byte[] getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(byte[] featuredImage) {
+        this.featuredImage = featuredImage;
+    }
+
+    public String getFeaturedImageContentType() {
+        return featuredImageContentType;
+    }
+
+    public void setFeaturedImageContentType(String featuredImageContentType) {
+        this.featuredImageContentType = featuredImageContentType;
+    }
+
+    public String getFeaturedImageUrl() {
+        return featuredImageUrl;
+    }
+
+    public void setFeaturedImageUrl(String featuredImageUrl) {
+        this.featuredImageUrl = featuredImageUrl;
     }
 
     public String getTitle() {
@@ -97,6 +127,8 @@ public class NewsDTO implements Serializable {
     public String toString() {
         return "NewsDTO{" +
             "id=" + getId() +
+            ", featuredImage='" + getFeaturedImage() + "'" +
+            ", featuredImageUrl='" + getFeaturedImageUrl() + "'" +
             ", title='" + getTitle() + "'" +
             ", detail='" + getDetail() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +

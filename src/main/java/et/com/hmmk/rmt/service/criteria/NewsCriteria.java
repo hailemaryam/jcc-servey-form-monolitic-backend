@@ -27,6 +27,8 @@ public class NewsCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter featuredImageUrl;
+
     private StringFilter title;
 
     private StringFilter createdBy;
@@ -41,6 +43,7 @@ public class NewsCriteria implements Serializable, Criteria {
 
     public NewsCriteria(NewsCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.featuredImageUrl = other.featuredImageUrl == null ? null : other.featuredImageUrl.copy();
         this.title = other.title == null ? null : other.title.copy();
         this.createdBy = other.createdBy == null ? null : other.createdBy.copy();
         this.registeredTime = other.registeredTime == null ? null : other.registeredTime.copy();
@@ -66,6 +69,21 @@ public class NewsCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getFeaturedImageUrl() {
+        return featuredImageUrl;
+    }
+
+    public StringFilter featuredImageUrl() {
+        if (featuredImageUrl == null) {
+            featuredImageUrl = new StringFilter();
+        }
+        return featuredImageUrl;
+    }
+
+    public void setFeaturedImageUrl(StringFilter featuredImageUrl) {
+        this.featuredImageUrl = featuredImageUrl;
     }
 
     public StringFilter getTitle() {
@@ -147,6 +165,7 @@ public class NewsCriteria implements Serializable, Criteria {
         final NewsCriteria that = (NewsCriteria) o;
         return (
             Objects.equals(id, that.id) &&
+            Objects.equals(featuredImageUrl, that.featuredImageUrl) &&
             Objects.equals(title, that.title) &&
             Objects.equals(createdBy, that.createdBy) &&
             Objects.equals(registeredTime, that.registeredTime) &&
@@ -157,7 +176,7 @@ public class NewsCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, createdBy, registeredTime, updateTime, distinct);
+        return Objects.hash(id, featuredImageUrl, title, createdBy, registeredTime, updateTime, distinct);
     }
 
     // prettier-ignore
@@ -165,6 +184,7 @@ public class NewsCriteria implements Serializable, Criteria {
     public String toString() {
         return "NewsCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
+            (featuredImageUrl != null ? "featuredImageUrl=" + featuredImageUrl + ", " : "") +
             (title != null ? "title=" + title + ", " : "") +
             (createdBy != null ? "createdBy=" + createdBy + ", " : "") +
             (registeredTime != null ? "registeredTime=" + registeredTime + ", " : "") +

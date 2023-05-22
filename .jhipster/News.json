@@ -2,6 +2,15 @@
   "name": "News",
   "fields": [
     {
+      "fieldName": "featuredImage",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "featuredImageUrl",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "title",
       "fieldType": "String"
     },

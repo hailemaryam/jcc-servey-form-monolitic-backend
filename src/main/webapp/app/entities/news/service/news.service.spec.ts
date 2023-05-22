@@ -25,6 +25,9 @@ describe('News Service', () => {
 
     elemDefault = {
       id: 0,
+      featuredImageContentType: 'image/png',
+      featuredImage: 'AAAAAAA',
+      featuredImageUrl: 'AAAAAAA',
       title: 'AAAAAAA',
       detail: 'AAAAAAA',
       createdBy: 'AAAAAAA',
@@ -79,6 +82,8 @@ describe('News Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          featuredImage: 'BBBBBB',
+          featuredImageUrl: 'BBBBBB',
           title: 'BBBBBB',
           detail: 'BBBBBB',
           createdBy: 'BBBBBB',
@@ -106,6 +111,7 @@ describe('News Service', () => {
     it('should partial update a News', () => {
       const patchObject = Object.assign(
         {
+          featuredImage: 'BBBBBB',
           title: 'BBBBBB',
           createdBy: 'BBBBBB',
           updateTime: currentDate.format(DATE_TIME_FORMAT),
@@ -134,6 +140,8 @@ describe('News Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          featuredImage: 'BBBBBB',
+          featuredImageUrl: 'BBBBBB',
           title: 'BBBBBB',
           detail: 'BBBBBB',
           createdBy: 'BBBBBB',
@@ -196,7 +204,7 @@ describe('News Service', () => {
       });
 
       it('should add only unique News to an array', () => {
-        const newsArray: INews[] = [{ id: 123 }, { id: 456 }, { id: 16578 }];
+        const newsArray: INews[] = [{ id: 123 }, { id: 456 }, { id: 79550 }];
         const newsCollection: INews[] = [{ id: 123 }];
         expectedResult = service.addNewsToCollectionIfMissing(newsCollection, ...newsArray);
         expect(expectedResult).toHaveLength(3);

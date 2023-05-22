@@ -23,6 +23,16 @@ public class News implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Lob
+    @Column(name = "featured_image")
+    private byte[] featuredImage;
+
+    @Column(name = "featured_image_content_type")
+    private String featuredImageContentType;
+
+    @Column(name = "featured_image_url")
+    private String featuredImageUrl;
+
     @Column(name = "title")
     private String title;
 
@@ -53,6 +63,45 @@ public class News implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public byte[] getFeaturedImage() {
+        return this.featuredImage;
+    }
+
+    public News featuredImage(byte[] featuredImage) {
+        this.setFeaturedImage(featuredImage);
+        return this;
+    }
+
+    public void setFeaturedImage(byte[] featuredImage) {
+        this.featuredImage = featuredImage;
+    }
+
+    public String getFeaturedImageContentType() {
+        return this.featuredImageContentType;
+    }
+
+    public News featuredImageContentType(String featuredImageContentType) {
+        this.featuredImageContentType = featuredImageContentType;
+        return this;
+    }
+
+    public void setFeaturedImageContentType(String featuredImageContentType) {
+        this.featuredImageContentType = featuredImageContentType;
+    }
+
+    public String getFeaturedImageUrl() {
+        return this.featuredImageUrl;
+    }
+
+    public News featuredImageUrl(String featuredImageUrl) {
+        this.setFeaturedImageUrl(featuredImageUrl);
+        return this;
+    }
+
+    public void setFeaturedImageUrl(String featuredImageUrl) {
+        this.featuredImageUrl = featuredImageUrl;
     }
 
     public String getTitle() {
@@ -144,6 +193,9 @@ public class News implements Serializable {
     public String toString() {
         return "News{" +
             "id=" + getId() +
+            ", featuredImage='" + getFeaturedImage() + "'" +
+            ", featuredImageContentType='" + getFeaturedImageContentType() + "'" +
+            ", featuredImageUrl='" + getFeaturedImageUrl() + "'" +
             ", title='" + getTitle() + "'" +
             ", detail='" + getDetail() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +

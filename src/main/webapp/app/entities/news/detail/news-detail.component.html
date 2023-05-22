@@ -14,6 +14,23 @@
         <dd>
           <span>{{ news.id }}</span>
         </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.news.featuredImage">Featured Image</span></dt>
+        <dd>
+          <div *ngIf="news.featuredImage">
+            <a (click)="openFile(news.featuredImage, news.featuredImageContentType)">
+              <img
+                [src]="'data:' + news.featuredImageContentType + ';base64,' + news.featuredImage"
+                style="max-width: 100%"
+                alt="news image"
+              />
+            </a>
+            {{ news.featuredImageContentType }}, {{ byteSize(news.featuredImage) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="rmtMonoliticApp.news.featuredImageUrl">Featured Image Url</span></dt>
+        <dd>
+          <span>{{ news.featuredImageUrl }}</span>
+        </dd>
         <dt><span jhiTranslate="rmtMonoliticApp.news.title">Title</span></dt>
         <dd>
           <span>{{ news.title }}</span>

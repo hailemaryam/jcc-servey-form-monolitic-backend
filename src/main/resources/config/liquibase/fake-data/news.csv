@@ -1,11 +1,11 @@
-id;title;detail;created_by;registered_time;update_time
-1;technologies Computer;../fake-data/blob/hipster.txt;hack Tasty internet;2023-05-13T03:42:18;2023-05-12T13:07:51
-2;Consultant Ergonomic;../fake-data/blob/hipster.txt;deposit maximize;2023-05-12T13:48:27;2023-05-12T23:06:28
-3;open invoice synthesizing;../fake-data/blob/hipster.txt;Investment;2023-05-12T20:57:16;2023-05-12T15:18:57
-4;Electronics auxiliary Account;../fake-data/blob/hipster.txt;Personal;2023-05-12T08:47:08;2023-05-12T14:47:59
-5;synergistic Investment;../fake-data/blob/hipster.txt;orange pink infomediaries;2023-05-13T04:04:16;2023-05-12T19:06:59
-6;withdrawal Jewelery;../fake-data/blob/hipster.txt;Reverse-engineered Practical;2023-05-13T02:32:16;2023-05-12T15:05:15
-7;District;../fake-data/blob/hipster.txt;global Cotton hack;2023-05-12T11:02:50;2023-05-12T23:03:48
-8;Bedfordshire bus;../fake-data/blob/hipster.txt;Bedfordshire;2023-05-12T22:57:31;2023-05-13T00:40:13
-9;web-enabled Won;../fake-data/blob/hipster.txt;users Inlet;2023-05-12T13:36:38;2023-05-13T01:34:44
-10;Loan Utah HTTP;../fake-data/blob/hipster.txt;transmitting;2023-05-13T04:33:21;2023-05-12T18:22:56
+id;featured_image;featured_image_content_type;featured_image_url;title;detail;created_by;registered_time;update_time
+1;../fake-data/blob/hipster.png;image/png;technologies Computer;hack Tasty internet;../fake-data/blob/hipster.txt;index;2023-05-12T12:08:59;2023-05-13T00:23:23
+2;../fake-data/blob/hipster.png;image/png;Small;world-class;../fake-data/blob/hipster.txt;maximize;2023-05-12T13:48:27;2023-05-12T23:06:28
+3;../fake-data/blob/hipster.png;image/png;open invoice synthesizing;Investment;../fake-data/blob/hipster.txt;Platinum olive;2023-05-13T06:10:09;2023-05-12T07:54:33
+4;../fake-data/blob/hipster.png;image/png;Creative Personal;Lithuanian pixel e-services;../fake-data/blob/hipster.txt;emulation;2023-05-12T22:54:06;2023-05-12T16:31:00
+5;../fake-data/blob/hipster.png;image/png;Kenyan Borders;Soft Reverse-engineered;../fake-data/blob/hipster.txt;e-business;2023-05-12T15:05:15;2023-05-13T06:06:22
+6;../fake-data/blob/hipster.png;image/png;schemas global Cotton;Wooden world-class Programmable;../fake-data/blob/hipster.txt;Account multimedia multimedia;2023-05-12T08:23:23;2023-05-12T20:07:42
+7;../fake-data/blob/hipster.png;image/png;models users Inlet;Up-sized Customer PNG;../fake-data/blob/hipster.txt;Indiana;2023-05-12T11:16:09;2023-05-12T10:29:02
+8;../fake-data/blob/hipster.png;image/png;French;Front-line static South;../fake-data/blob/hipster.txt;communities Developer network;2023-05-12T09:08:30;2023-05-12T20:51:47
+9;../fake-data/blob/hipster.png;image/png;firewall back-end;Cove Chips Right-sized;../fake-data/blob/hipster.txt;Lodge;2023-05-12T12:53:13;2023-05-13T04:36:38
+10;../fake-data/blob/hipster.png;image/png;Branch Keyboard compress;Automotive;../fake-data/blob/hipster.txt;Wyoming;2023-05-13T02:44:12;2023-05-13T00:29:35

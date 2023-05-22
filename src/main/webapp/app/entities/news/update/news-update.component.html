@@ -14,6 +14,69 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.news.featuredImage" for="field_featuredImage"
+            >Featured Image</label
+          >
+          <div>
+            <img
+              [src]="'data:' + editForm.get('featuredImageContentType')!.value + ';base64,' + editForm.get('featuredImage')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('featuredImage')!.value"
+              alt="news image"
+            />
+            <div *ngIf="editForm.get('featuredImage')!.value" class="form-text text-danger clearfix">
+              <span class="pull-left"
+                >{{ editForm.get('featuredImageContentType')!.value }}, {{ byteSize(editForm.get('featuredImage')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="clearInputImage('featuredImage', 'featuredImageContentType', 'file_featuredImage')"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_featuredImage"
+              data-cy="featuredImage"
+              (change)="setFileData($event, 'featuredImage', true)"
+              accept="image/*"
+              jhiTranslate="entity.action.addimage"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="featuredImage"
+            id="field_featuredImage"
+            data-cy="featuredImage"
+            formControlName="featuredImage"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="featuredImageContentType"
+            id="field_featuredImageContentType"
+            formControlName="featuredImageContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="rmtMonoliticApp.news.featuredImageUrl" for="field_featuredImageUrl"
+            >Featured Image Url</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="featuredImageUrl"
+            id="field_featuredImageUrl"
+            data-cy="featuredImageUrl"
+            formControlName="featuredImageUrl"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" jhiTranslate="rmtMonoliticApp.news.title" for="field_title">Title</label>
           <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
         </div>

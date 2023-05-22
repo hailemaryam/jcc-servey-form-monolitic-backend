@@ -33,6 +33,12 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="featuredImage">
+            <span jhiTranslate="rmtMonoliticApp.news.featuredImage">Featured Image</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="featuredImageUrl">
+            <span jhiTranslate="rmtMonoliticApp.news.featuredImageUrl">Featured Image Url</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="title">
             <span jhiTranslate="rmtMonoliticApp.news.title">Title</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -56,6 +62,17 @@
           <td>
             <a [routerLink]="['/news', news.id, 'view']">{{ news.id }}</a>
           </td>
+          <td>
+            <a *ngIf="news.featuredImage" (click)="openFile(news.featuredImage, news.featuredImageContentType)">
+              <img
+                [src]="'data:' + news.featuredImageContentType + ';base64,' + news.featuredImage"
+                style="max-height: 30px"
+                alt="news image"
+              />
+            </a>
+            <span *ngIf="news.featuredImage">{{ news.featuredImageContentType }}, {{ byteSize(news.featuredImage) }}</span>
+          </td>
+          <td>{{ news.featuredImageUrl }}</td>
           <td>{{ news.title }}</td>
           <td>{{ news.detail }}</td>
           <td>{{ news.createdBy }}</td>

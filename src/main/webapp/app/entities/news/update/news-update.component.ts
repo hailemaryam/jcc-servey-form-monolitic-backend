@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +23,9 @@ export class NewsUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    featuredImage: [],
+    featuredImageContentType: [],
+    featuredImageUrl: [],
     title: [],
     detail: [],
     createdBy: [],
@@ -34,6 +37,7 @@ export class NewsUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected newsService: NewsService,
+    protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -63,6 +67,16 @@ export class NewsUpdateComponent implements OnInit {
       error: (err: FileLoadError) =>
         this.eventManager.broadcast(new EventWithContent<AlertError>('rmtMonoliticApp.error', { ...err, key: 'error.file.' + err.key })),
     });
+  }
+
+  clearInputImage(field: string, fieldContentType: string, idInput: string): void {
+    this.editForm.patchValue({
+      [field]: null,
+      [fieldContentType]: null,
+    });
+    if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+      this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
+    }
   }
 
   previousState(): void {
@@ -101,6 +115,9 @@ export class NewsUpdateComponent implements OnInit {
   protected updateForm(news: INews): void {
     this.editForm.patchValue({
       id: news.id,
+      featuredImage: news.featuredImage,
+      featuredImageContentType: news.featuredImageContentType,
+      featuredImageUrl: news.featuredImageUrl,
       title: news.title,
       detail: news.detail,
       createdBy: news.createdBy,
@@ -113,6 +130,9 @@ export class NewsUpdateComponent implements OnInit {
     return {
       ...new News(),
       id: this.editForm.get(['id'])!.value,
+      featuredImageContentType: this.editForm.get(['featuredImageContentType'])!.value,
+      featuredImage: this.editForm.get(['featuredImage'])!.value,
+      featuredImageUrl: this.editForm.get(['featuredImageUrl'])!.value,
       title: this.editForm.get(['title'])!.value,
       detail: this.editForm.get(['detail'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,

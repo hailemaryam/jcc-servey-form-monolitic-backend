@@ -90,6 +90,9 @@ public class NewsQueryService extends QueryService<News> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), News_.id));
             }
+            if (criteria.getFeaturedImageUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFeaturedImageUrl(), News_.featuredImageUrl));
+            }
             if (criteria.getTitle() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTitle(), News_.title));
             }

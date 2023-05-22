@@ -35,6 +35,14 @@ import org.springframework.util.Base64Utils;
 @WithMockUser
 class NewsResourceIT {
 
+    private static final byte[] DEFAULT_FEATURED_IMAGE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_FEATURED_IMAGE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_FEATURED_IMAGE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_FEATURED_IMAGE_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_FEATURED_IMAGE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_FEATURED_IMAGE_URL = "BBBBBBBBBB";
+
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
@@ -78,6 +86,9 @@ class NewsResourceIT {
      */
     public static News createEntity(EntityManager em) {
         News news = new News()
+            .featuredImage(DEFAULT_FEATURED_IMAGE)
+            .featuredImageContentType(DEFAULT_FEATURED_IMAGE_CONTENT_TYPE)
+            .featuredImageUrl(DEFAULT_FEATURED_IMAGE_URL)
             .title(DEFAULT_TITLE)
             .detail(DEFAULT_DETAIL)
             .createdBy(DEFAULT_CREATED_BY)
@@ -94,6 +105,9 @@ class NewsResourceIT {
      */
     public static News createUpdatedEntity(EntityManager em) {
         News news = new News()
+            .featuredImage(UPDATED_FEATURED_IMAGE)
+            .featuredImageContentType(UPDATED_FEATURED_IMAGE_CONTENT_TYPE)
+            .featuredImageUrl(UPDATED_FEATURED_IMAGE_URL)
             .title(UPDATED_TITLE)
             .detail(UPDATED_DETAIL)
             .createdBy(UPDATED_CREATED_BY)
@@ -121,6 +135,9 @@ class NewsResourceIT {
         List<News> newsList = newsRepository.findAll();
         assertThat(newsList).hasSize(databaseSizeBeforeCreate + 1);
         News testNews = newsList.get(newsList.size() - 1);
+        assertThat(testNews.getFeaturedImage()).isEqualTo(DEFAULT_FEATURED_IMAGE);
+        assertThat(testNews.getFeaturedImageContentType()).isEqualTo(DEFAULT_FEATURED_IMAGE_CONTENT_TYPE);
+        assertThat(testNews.getFeaturedImageUrl()).isEqualTo(DEFAULT_FEATURED_IMAGE_URL);
         assertThat(testNews.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testNews.getDetail()).isEqualTo(DEFAULT_DETAIL);
         assertThat(testNews.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
@@ -159,6 +176,9 @@ class NewsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(news.getId().intValue())))
+            .andExpect(jsonPath("$.[*].featuredImageContentType").value(hasItem(DEFAULT_FEATURED_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].featuredImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_FEATURED_IMAGE))))
+            .andExpect(jsonPath("$.[*].featuredImageUrl").value(hasItem(DEFAULT_FEATURED_IMAGE_URL)))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].detail").value(hasItem(DEFAULT_DETAIL.toString())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
@@ -178,6 +198,9 @@ class NewsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(news.getId().intValue()))
+            .andExpect(jsonPath("$.featuredImageContentType").value(DEFAULT_FEATURED_IMAGE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.featuredImage").value(Base64Utils.encodeToString(DEFAULT_FEATURED_IMAGE)))
+            .andExpect(jsonPath("$.featuredImageUrl").value(DEFAULT_FEATURED_IMAGE_URL))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.detail").value(DEFAULT_DETAIL.toString()))
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
@@ -201,6 +224,84 @@ class NewsResourceIT {
 
         defaultNewsShouldBeFound("id.lessThanOrEqual=" + id);
         defaultNewsShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl equals to DEFAULT_FEATURED_IMAGE_URL
+        defaultNewsShouldBeFound("featuredImageUrl.equals=" + DEFAULT_FEATURED_IMAGE_URL);
+
+        // Get all the newsList where featuredImageUrl equals to UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldNotBeFound("featuredImageUrl.equals=" + UPDATED_FEATURED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl not equals to DEFAULT_FEATURED_IMAGE_URL
+        defaultNewsShouldNotBeFound("featuredImageUrl.notEquals=" + DEFAULT_FEATURED_IMAGE_URL);
+
+        // Get all the newsList where featuredImageUrl not equals to UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldBeFound("featuredImageUrl.notEquals=" + UPDATED_FEATURED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlIsInShouldWork() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl in DEFAULT_FEATURED_IMAGE_URL or UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldBeFound("featuredImageUrl.in=" + DEFAULT_FEATURED_IMAGE_URL + "," + UPDATED_FEATURED_IMAGE_URL);
+
+        // Get all the newsList where featuredImageUrl equals to UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldNotBeFound("featuredImageUrl.in=" + UPDATED_FEATURED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl is not null
+        defaultNewsShouldBeFound("featuredImageUrl.specified=true");
+
+        // Get all the newsList where featuredImageUrl is null
+        defaultNewsShouldNotBeFound("featuredImageUrl.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlContainsSomething() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl contains DEFAULT_FEATURED_IMAGE_URL
+        defaultNewsShouldBeFound("featuredImageUrl.contains=" + DEFAULT_FEATURED_IMAGE_URL);
+
+        // Get all the newsList where featuredImageUrl contains UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldNotBeFound("featuredImageUrl.contains=" + UPDATED_FEATURED_IMAGE_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllNewsByFeaturedImageUrlNotContainsSomething() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        // Get all the newsList where featuredImageUrl does not contain DEFAULT_FEATURED_IMAGE_URL
+        defaultNewsShouldNotBeFound("featuredImageUrl.doesNotContain=" + DEFAULT_FEATURED_IMAGE_URL);
+
+        // Get all the newsList where featuredImageUrl does not contain UPDATED_FEATURED_IMAGE_URL
+        defaultNewsShouldBeFound("featuredImageUrl.doesNotContain=" + UPDATED_FEATURED_IMAGE_URL);
     }
 
     @Test
@@ -472,6 +573,9 @@ class NewsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(news.getId().intValue())))
+            .andExpect(jsonPath("$.[*].featuredImageContentType").value(hasItem(DEFAULT_FEATURED_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].featuredImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_FEATURED_IMAGE))))
+            .andExpect(jsonPath("$.[*].featuredImageUrl").value(hasItem(DEFAULT_FEATURED_IMAGE_URL)))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].detail").value(hasItem(DEFAULT_DETAIL.toString())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
@@ -525,6 +629,9 @@ class NewsResourceIT {
         // Disconnect from session so that the updates on updatedNews are not directly saved in db
         em.detach(updatedNews);
         updatedNews
+            .featuredImage(UPDATED_FEATURED_IMAGE)
+            .featuredImageContentType(UPDATED_FEATURED_IMAGE_CONTENT_TYPE)
+            .featuredImageUrl(UPDATED_FEATURED_IMAGE_URL)
             .title(UPDATED_TITLE)
             .detail(UPDATED_DETAIL)
             .createdBy(UPDATED_CREATED_BY)
@@ -544,6 +651,9 @@ class NewsResourceIT {
         List<News> newsList = newsRepository.findAll();
         assertThat(newsList).hasSize(databaseSizeBeforeUpdate);
         News testNews = newsList.get(newsList.size() - 1);
+        assertThat(testNews.getFeaturedImage()).isEqualTo(UPDATED_FEATURED_IMAGE);
+        assertThat(testNews.getFeaturedImageContentType()).isEqualTo(UPDATED_FEATURED_IMAGE_CONTENT_TYPE);
+        assertThat(testNews.getFeaturedImageUrl()).isEqualTo(UPDATED_FEATURED_IMAGE_URL);
         assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testNews.getDetail()).isEqualTo(UPDATED_DETAIL);
         assertThat(testNews.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
@@ -629,43 +739,8 @@ class NewsResourceIT {
         partialUpdatedNews.setId(news.getId());
 
         partialUpdatedNews
-            .title(UPDATED_TITLE)
-            .createdBy(UPDATED_CREATED_BY)
-            .registeredTime(UPDATED_REGISTERED_TIME)
-            .updateTime(UPDATED_UPDATE_TIME);
-
-        restNewsMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedNews.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedNews))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the News in the database
-        List<News> newsList = newsRepository.findAll();
-        assertThat(newsList).hasSize(databaseSizeBeforeUpdate);
-        News testNews = newsList.get(newsList.size() - 1);
-        assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
-        assertThat(testNews.getDetail()).isEqualTo(DEFAULT_DETAIL);
-        assertThat(testNews.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testNews.getRegisteredTime()).isEqualTo(UPDATED_REGISTERED_TIME);
-        assertThat(testNews.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
-    }
-
-    @Test
-    @Transactional
-    void fullUpdateNewsWithPatch() throws Exception {
-        // Initialize the database
-        newsRepository.saveAndFlush(news);
-
-        int databaseSizeBeforeUpdate = newsRepository.findAll().size();
-
-        // Update the news using partial update
-        News partialUpdatedNews = new News();
-        partialUpdatedNews.setId(news.getId());
-
-        partialUpdatedNews
+            .featuredImage(UPDATED_FEATURED_IMAGE)
+            .featuredImageContentType(UPDATED_FEATURED_IMAGE_CONTENT_TYPE)
             .title(UPDATED_TITLE)
             .detail(UPDATED_DETAIL)
             .createdBy(UPDATED_CREATED_BY)
@@ -684,6 +759,53 @@ class NewsResourceIT {
         List<News> newsList = newsRepository.findAll();
         assertThat(newsList).hasSize(databaseSizeBeforeUpdate);
         News testNews = newsList.get(newsList.size() - 1);
+        assertThat(testNews.getFeaturedImage()).isEqualTo(UPDATED_FEATURED_IMAGE);
+        assertThat(testNews.getFeaturedImageContentType()).isEqualTo(UPDATED_FEATURED_IMAGE_CONTENT_TYPE);
+        assertThat(testNews.getFeaturedImageUrl()).isEqualTo(DEFAULT_FEATURED_IMAGE_URL);
+        assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testNews.getDetail()).isEqualTo(UPDATED_DETAIL);
+        assertThat(testNews.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testNews.getRegisteredTime()).isEqualTo(UPDATED_REGISTERED_TIME);
+        assertThat(testNews.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateNewsWithPatch() throws Exception {
+        // Initialize the database
+        newsRepository.saveAndFlush(news);
+
+        int databaseSizeBeforeUpdate = newsRepository.findAll().size();
+
+        // Update the news using partial update
+        News partialUpdatedNews = new News();
+        partialUpdatedNews.setId(news.getId());
+
+        partialUpdatedNews
+            .featuredImage(UPDATED_FEATURED_IMAGE)
+            .featuredImageContentType(UPDATED_FEATURED_IMAGE_CONTENT_TYPE)
+            .featuredImageUrl(UPDATED_FEATURED_IMAGE_URL)
+            .title(UPDATED_TITLE)
+            .detail(UPDATED_DETAIL)
+            .createdBy(UPDATED_CREATED_BY)
+            .registeredTime(UPDATED_REGISTERED_TIME)
+            .updateTime(UPDATED_UPDATE_TIME);
+
+        restNewsMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedNews.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedNews))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the News in the database
+        List<News> newsList = newsRepository.findAll();
+        assertThat(newsList).hasSize(databaseSizeBeforeUpdate);
+        News testNews = newsList.get(newsList.size() - 1);
+        assertThat(testNews.getFeaturedImage()).isEqualTo(UPDATED_FEATURED_IMAGE);
+        assertThat(testNews.getFeaturedImageContentType()).isEqualTo(UPDATED_FEATURED_IMAGE_CONTENT_TYPE);
+        assertThat(testNews.getFeaturedImageUrl()).isEqualTo(UPDATED_FEATURED_IMAGE_URL);
         assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testNews.getDetail()).isEqualTo(UPDATED_DETAIL);
         assertThat(testNews.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);

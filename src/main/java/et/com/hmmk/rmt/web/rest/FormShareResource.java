@@ -1,9 +1,8 @@
 package et.com.hmmk.rmt.web.rest;
 
-import et.com.hmmk.rmt.service.CompanyQueryService;
-import et.com.hmmk.rmt.service.FormProgresssQueryService;
-import et.com.hmmk.rmt.service.FormProgresssService;
-import et.com.hmmk.rmt.service.ProjectQueryService;
+import et.com.hmmk.rmt.domain.User;
+import et.com.hmmk.rmt.repository.UserRepository;
+import et.com.hmmk.rmt.service.*;
 import et.com.hmmk.rmt.service.criteria.CompanyCriteria;
 import et.com.hmmk.rmt.service.criteria.FormProgresssCriteria;
 import et.com.hmmk.rmt.service.criteria.ProjectCriteria;
@@ -14,6 +13,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,16 +44,24 @@ public class FormShareResource {
 
     private final ProjectQueryService projectQueryService;
 
+    private final MailService mailService;
+
+    private final UserRepository userRepository;
+
     public FormShareResource(
         FormProgresssService formProgresssService,
         FormProgresssQueryService formProgresssQueryService,
         CompanyQueryService companyQueryService,
-        ProjectQueryService projectQueryService
+        ProjectQueryService projectQueryService,
+        MailService mailService,
+        UserRepository userRepository
     ) {
         this.formProgresssService = formProgresssService;
         this.formProgresssQueryService = formProgresssQueryService;
         this.companyQueryService = companyQueryService;
         this.projectQueryService = projectQueryService;
+        this.mailService = mailService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -80,6 +88,8 @@ public class FormShareResource {
         formProgresssCriteria.setFormId(formFilter);
         List<FormProgresssDTO> formProgressList = formProgresssQueryService.findByCriteria(formProgresssCriteria);
         if (formProgressList.isEmpty()) {
+            Optional<User> userById = userRepository.findById(formProgresssDTO.getUser().getId());
+            mailService.sendNotificationEmail(userById.get());
             for (ProjectDTO projectDTO : getUsersProjectByCompanyId(formProgresssDTO.getUser().getId())) {
                 FormProgresssDTO formProgresssDTOTobeCreated = formProgresssDTO;
                 formProgresssDTOTobeCreated.setSubmited(false);
@@ -118,6 +128,8 @@ public class FormShareResource {
             formProgresssCriteria.setFormId(formFilter);
             List<FormProgresssDTO> formProgressList = formProgresssQueryService.findByCriteria(formProgresssCriteria);
             if (formProgressList.isEmpty()) {
+                Optional<User> userById = userRepository.findById(companyDTO.getId());
+                mailService.sendNotificationEmail(userById.get());
                 getUsersProjectByCompanyId(companyDTO.getId())
                     .forEach(projectDTO -> {
                         FormProgresssDTO formProgresssDTO = new FormProgresssDTO();

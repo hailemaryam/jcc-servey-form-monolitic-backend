@@ -93,6 +93,12 @@ public class MailService {
     }
 
     @Async
+    public void sendNotificationEmail(User user) {
+        log.debug("Sending notification email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/shareNotification", "email.notification.title");
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");

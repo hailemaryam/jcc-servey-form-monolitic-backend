@@ -107,6 +107,7 @@ public class ExportResource {
         }
         return responseDTOList
             .stream()
+            .filter(item -> item.getSectoralScope() != null)
             .filter(item ->
                 item.getProjectStartDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
                 item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectEndDate()) ||
@@ -164,6 +165,7 @@ public class ExportResource {
         List<SectorRegionJoin> sectorRegionJoinList = new ArrayList<>();
         List<SectorWithRegion> filteredWithDate = sectorWithRegionList
             .stream()
+            .filter(item -> item.getSector() != null)
             .filter(item ->
                 item.getProjectStartDate().isAfter(dateFilterRequestDTO.getProjectStartDate()) &&
                 item.getProjectStartDate().isBefore(dateFilterRequestDTO.getProjectEndDate()) ||

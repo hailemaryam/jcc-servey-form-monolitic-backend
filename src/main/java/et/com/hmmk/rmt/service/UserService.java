@@ -293,7 +293,16 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
+        return userRepository
+            .findAll(pageable)
+            .map(AdminUserDTO::new)
+            .map(adminUserDTO -> {
+                Optional<CompanyDTO> companyDTOOptional = companyService.findOne(adminUserDTO.getId());
+                if (companyDTOOptional.isPresent()) {
+                    adminUserDTO.setCompanyName(companyDTOOptional.get().getCompanyName());
+                }
+                return adminUserDTO;
+            });
     }
 
     @Transactional(readOnly = true)
